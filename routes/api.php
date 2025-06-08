@@ -29,7 +29,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/email/verification-notification', [VerificationController::class, 'resend'])
         ->middleware(['throttle:6,1'])->name('verification.send');
 });
-
+// routes/api.php
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok']);
+});
 // Debug routes to help troubleshoot session/auth issues
 Route::get('/debug-session', function (Request $request) {
     return response()->json([
