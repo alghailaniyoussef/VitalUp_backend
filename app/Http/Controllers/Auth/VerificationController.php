@@ -57,17 +57,17 @@ class VerificationController extends Controller
         $user = \App\Models\User::findOrFail($id);
 
         if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
-            return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/auth/signin?verification=invalid');
+            return redirect(env('FRONTEND_URL', 'https://vital-up-frontend.vercel.app') . '/auth/signin?verification=invalid');
         }
 
         if ($user->hasVerifiedEmail()) {
-            return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/auth/signin?verification=already-verified');
+            return redirect(env('FRONTEND_URL', 'https://vital-up-frontend.vercel.app') . '/auth/signin?verification=already-verified');
         }
 
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
         }
 
-        return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/auth/signin?verification=success');
+        return redirect(env('FRONTEND_URL', 'https://vital-up-frontend.vercel.app') . '/auth/signin?verification=success');
     }
 }

@@ -94,7 +94,7 @@
             <p>¿Listo para comenzar tu viaje hacia una vida más saludable?</p>
 
             <div style="text-align: center;">
-                <a href="{{ config('app.frontend_url', 'http://localhost:3000') }}" class="cta-button">
+                <a href="{{ env('FRONTEND_URL', 'https://vital-up-frontend.vercel.app') }}" class="cta-button">
                     🚀 Comenzar Ahora
                 </a>
             </div>
