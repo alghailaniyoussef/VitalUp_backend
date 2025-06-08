@@ -5,7 +5,12 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000', 'https://vital-up-frontend.vercel.app'],
+    'allowed_origins' => [
+        'http://localhost:3000', 
+        'https://vital-up-frontend.vercel.app',
+        'https://vital-up-frontend-7s2pn5jp8-youssef-ghailanis-projects.vercel.app',
+        'https://vitalupbackend-production.up.railway.app'  // Add this
+    ],
 
     'allowed_origins_patterns' => [],
 
