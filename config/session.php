@@ -169,7 +169,7 @@ return [
     |
     */
 
-'secure' => env('SESSION_SECURE_COOKIE', false), // Should be false for local development
+'secure' => env('SESSION_SECURE_COOKIE', true), // Must be true for production HTTPS
 
     /*
     |--------------------------------------------------------------------------
@@ -199,7 +199,7 @@ return [
     |
     */
 
-'same_site' => env('SESSION_SAME_SITE', 'lax'), // Change from null to 'lax'
+'same_site' => env('SESSION_SAME_SITE', 'none'), // Must be 'none' for cross-origin requests
     /*
     |--------------------------------------------------------------------------
     | Partitioned Cookies
