@@ -195,10 +195,9 @@ class QuizController extends Controller
                 return response()->json(['message' => 'Ya has completado este cuestionario'], 403);
             }
 
-            // Find or create incomplete quiz attempt
+            // Find any existing attempt for this quiz
             $attempt = QuizAttempt::where('user_id', $user->id)
                 ->where('quiz_id', $quiz->id)
-                ->whereNull('completed_at')
                 ->first();
 
             if (!$attempt) {
@@ -210,6 +209,11 @@ class QuizController extends Controller
                     'points_earned' => 0,
                     'completed_at' => null
                 ]);
+            } elseif ($attempt->completed_at) {
+                // If quiz was already completed, return error
+                return response()->json([
+                    'message' => 'Quiz already completed'
+                ], 403);
             }
 
             // Add this answer to the attempt
@@ -288,6 +292,11 @@ class QuizController extends Controller
                     'points_earned' => 0,
                     'started_at' => now()
                 ]);
+            } elseif ($attempt->completed_at) {
+                // If quiz was already completed, return error
+                return response()->json([
+                    'message' => 'Quiz already completed'
+                ], 403);
             } else {
                 // Update the existing attempt with new answers
                 $attempt->update([
@@ -355,14 +364,13 @@ class QuizController extends Controller
         $user = Auth::user();
         $quiz = Quiz::findOrFail($id);
 
-        // Find the incomplete attempt
+        // Find any existing attempt (completed or incomplete)
         $attempt = QuizAttempt::where('user_id', $user->id)
             ->where('quiz_id', $quiz->id)
-            ->whereNull('completed_at')
             ->first();
 
         if (!$attempt) {
-            // If no incomplete attempt exists, create a new one
+            // If no attempt exists at all, create a new one
             $attempt = QuizAttempt::create([
                 'user_id' => $user->id,
                 'quiz_id' => $quiz->id,
@@ -371,6 +379,11 @@ class QuizController extends Controller
                 'points_earned' => 0,
                 'started_at' => now()
             ]);
+        } elseif ($attempt->completed_at) {
+            // If quiz was already completed, return error
+            return response()->json([
+                'message' => 'Quiz already completed'
+            ], 403);
         }
 
         // Calculate final score
