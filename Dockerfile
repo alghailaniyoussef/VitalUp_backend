@@ -39,6 +39,9 @@ RUN composer run-script post-autoload-dump
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Copy .env.example to .env if .env doesn't exist
+RUN cp .env.example .env
+
 # Generate application key
 RUN php artisan key:generate --no-interaction
 
