@@ -16,55 +16,94 @@ class SanctumAuthController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        try {
+            Log::info('Registration attempt started', ['email' => $request->email]);
+            
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8|confirmed',
+            ]);
+            
+            Log::info('Validation passed, creating user');
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'points' => 0,
-            'level' => 1,
-        ]);
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'points' => 0,
+                'level' => 1,
+            ]);
+            
+            Log::info('User created successfully', ['user_id' => $user->id]);
 
-        // Create default user preferences
-        $user->preferences()->create([
-            'notification_preferences' => [
-                'quiz_reminders' => true,
-                'challenge_updates' => true,
-                'achievement_alerts' => true,
-                'weekly_summaries' => true,
-                'marketing_emails' => false,
-                'email_frequency' => 'weekly'
-            ],
-            'privacy_settings' => [
-                'profile_visibility' => 'private',
-                'share_achievements' => false,
-                'share_progress' => false
-            ],
-            'data_processing_consents' => [
-                'analytics' => false,
-                'personalization' => false,
-                'third_party_sharing' => false
-            ]
-        ]);
+            // Create default user preferences
+            try {
+                $user->preferences()->create([
+                    'notification_preferences' => [
+                        'quiz_reminders' => true,
+                        'challenge_updates' => true,
+                        'achievement_alerts' => true,
+                        'weekly_summaries' => true,
+                        'marketing_emails' => false,
+                        'email_frequency' => 'weekly'
+                    ],
+                    'privacy_settings' => [
+                        'profile_visibility' => 'private',
+                        'share_achievements' => false,
+                        'share_progress' => false
+                    ],
+                    'data_processing_consents' => [
+                        'analytics' => false,
+                        'personalization' => false,
+                        'third_party_sharing' => false
+                    ]
+                ]);
+                Log::info('User preferences created successfully');
+            } catch (\Exception $e) {
+                Log::error('Failed to create user preferences: ' . $e->getMessage());
+                // Continue without preferences for now
+            }
 
-        // Send email verification notification
-        $user->sendEmailVerificationNotification();
+            // Send email verification notification
+            try {
+                $user->sendEmailVerificationNotification();
+                Log::info('Email verification notification sent');
+            } catch (\Exception $e) {
+                Log::error('Failed to send email verification: ' . $e->getMessage());
+                // Continue without email verification for now
+            }
 
-        // Fire UserRegistered event for welcome email
-        event(new UserRegistered($user));
-        Log::info('UserRegistered event fired for user: ' . $user->email);
+            // Fire UserRegistered event for welcome email
+            try {
+                event(new UserRegistered($user));
+                Log::info('UserRegistered event fired for user: ' . $user->email);
+            } catch (\Exception $e) {
+                Log::error('Failed to fire UserRegistered event: ' . $e->getMessage());
+                // Continue without event for now
+            }
 
-        return response()->json([
-            'message' => 'Usuario registrado exitosamente. Por favor verifica tu email antes de iniciar sesión.',
-            'user' => $user->only(['id', 'name', 'email', 'points', 'level']),
-            'email_verification_required' => true,
-            'redirect_to_login' => true
-        ], 201);
+            return response()->json([
+                'message' => 'Usuario registrado exitosamente. Por favor verifica tu email antes de iniciar sesión.',
+                'user' => $user->only(['id', 'name', 'email', 'points', 'level']),
+                'email_verification_required' => true,
+                'redirect_to_login' => true
+            ], 201);
+            
+        } catch (ValidationException $e) {
+            Log::error('Validation failed during registration', ['errors' => $e->errors()]);
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Registration failed with exception: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            return response()->json([
+                'message' => 'Registration failed. Please try again.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function login(Request $req)
