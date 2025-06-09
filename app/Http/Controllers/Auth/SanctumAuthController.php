@@ -108,45 +108,111 @@ class SanctumAuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        try {
+            Log::info('Login attempt started', [
+                'email' => $request->email,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'origin' => $request->header('Origin'),
+                'referer' => $request->header('Referer'),
+                'session_id' => $request->session()->getId(),
+                'csrf_token' => $request->header('X-XSRF-TOKEN') ? 'present' : 'missing',
+                'cookies' => $request->header('Cookie') ? 'present' : 'missing'
+            ]);
 
-        $user = User::where('email', $request->email)->first();
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Credenciales incorrectas'], 401);
-        }
+            Log::info('Login validation passed');
 
-        // Check if email is verified
-        if (!$user->hasVerifiedEmail()) {
+            $user = User::where('email', $request->email)->first();
+
+            if (!$user) {
+                Log::warning('Login failed: User not found', ['email' => $request->email]);
+                return response()->json(['message' => 'Credenciales incorrectas'], 401);
+            }
+
+            if (!Hash::check($request->password, $user->password)) {
+                Log::warning('Login failed: Invalid password', ['user_id' => $user->id, 'email' => $request->email]);
+                return response()->json(['message' => 'Credenciales incorrectas'], 401);
+            }
+
+            Log::info('Password verification passed', ['user_id' => $user->id]);
+
+            // Check if email is verified
+            if (!$user->hasVerifiedEmail()) {
+                Log::warning('Login failed: Email not verified', ['user_id' => $user->id]);
+                return response()->json([
+                    'message' => 'Por favor verifica tu email antes de iniciar sesión.',
+                    'email_verification_required' => true
+                ], 403);
+            }
+
+            Log::info('Email verification check passed', ['user_id' => $user->id]);
+
+            // Login the user (this will create the session)
+            Auth::login($user);
+            $request->session()->regenerate();
+
+            Log::info('User logged in successfully', [
+                'user_id' => $user->id,
+                'session_id' => $request->session()->getId(),
+                'auth_check' => Auth::check(),
+                'auth_user_id' => Auth::id()
+            ]);
+
+            // Create a token for API access
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            Log::info('Token created successfully', ['user_id' => $user->id]);
+
+            $response = response()->json([
+                'message' => 'Login OK',
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'points' => $user->points ?? 0,
+                    'level' => $user->level ?? 1,
+                    'is_admin' => (bool) $user->is_admin,
+                    'email_verified_at' => $user->email_verified_at,
+                ],
+                'token' => $token,
+                'debug' => [
+                    'session_id' => $request->session()->getId(),
+                    'auth_check' => Auth::check(),
+                    'csrf_token_present' => $request->header('X-XSRF-TOKEN') ? true : false,
+                    'origin' => $request->header('Origin'),
+                    'user_agent' => $request->userAgent()
+                ]
+            ]);
+
+            Log::info('Login response prepared', ['user_id' => $user->id]);
+
+            return $response;
+
+        } catch (ValidationException $e) {
+            Log::error('Login validation failed', ['errors' => $e->errors()]);
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Login failed with exception: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'email' => $request->email ?? 'not provided'
+            ]);
             return response()->json([
-                'message' => 'Por favor verifica tu email antes de iniciar sesión.',
-                'email_verification_required' => true
-            ], 403);
+                'message' => 'Login failed. Please try again.',
+                'error' => $e->getMessage(),
+                'debug' => [
+                    'session_id' => $request->session()->getId(),
+                    'origin' => $request->header('Origin'),
+                    'csrf_token_present' => $request->header('X-XSRF-TOKEN') ? true : false
+                ]
+            ], 500);
         }
-
-        // Login the user (this will create the session)
-        Auth::login($user);
-        $request->session()->regenerate();
-
-        // Create a token for API access
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'message' => 'Login OK',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'points' => $user->points ?? 0,
-                'level' => $user->level ?? 1,
-                'is_admin' => (bool) $user->is_admin,
-                'email_verified_at' => $user->email_verified_at,
-            ],
-            'token' => $token
-        ]);
     }
 
     public function logout(Request $request)
@@ -177,11 +243,35 @@ class SanctumAuthController extends Controller
     public function user(Request $request)
     {
         try {
+            Log::info('User endpoint called', [
+                'session_id' => $request->session()->getId(),
+                'auth_check' => Auth::check(),
+                'auth_user_id' => Auth::id(),
+                'origin' => $request->header('Origin'),
+                'csrf_token' => $request->header('X-XSRF-TOKEN') ? 'present' : 'missing',
+                'cookies' => $request->header('Cookie') ? 'present' : 'missing',
+                'user_agent' => $request->userAgent()
+            ]);
+
             $user = $request->user();
 
             if (!$user) {
-                return response()->json(['error' => 'Usuario no autenticado'], 401);
+                Log::warning('User endpoint: No authenticated user found', [
+                    'session_id' => $request->session()->getId(),
+                    'auth_check' => Auth::check(),
+                    'session_data' => $request->session()->all()
+                ]);
+                return response()->json([
+                    'error' => 'Usuario no autenticado',
+                    'debug' => [
+                        'session_id' => $request->session()->getId(),
+                        'auth_check' => Auth::check(),
+                        'csrf_token_present' => $request->header('X-XSRF-TOKEN') ? true : false
+                    ]
+                ], 401);
             }
+
+            Log::info('User endpoint: User found', ['user_id' => $user->id]);
 
             return response()->json([
                 'id' => $user->id,
@@ -193,10 +283,26 @@ class SanctumAuthController extends Controller
                 'email_verified_at' => $user->email_verified_at,
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at,
+                'debug' => [
+                    'session_id' => $request->session()->getId(),
+                    'auth_check' => Auth::check(),
+                    'csrf_token_present' => $request->header('X-XSRF-TOKEN') ? true : false
+                ]
             ]);
         } catch (\Exception $e) {
-            Log::error('User fetch error: ' . $e->getMessage());
-            return response()->json(['error' => 'Error al obtener información del usuario'], 500);
+            Log::error('User fetch error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'session_id' => $request->session()->getId()
+            ]);
+            return response()->json([
+                'error' => 'Error al obtener información del usuario',
+                'debug' => [
+                    'session_id' => $request->session()->getId(),
+                    'error_message' => $e->getMessage()
+                ]
+            ], 500);
         }
     }
 }
