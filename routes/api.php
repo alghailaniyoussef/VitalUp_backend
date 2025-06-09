@@ -22,92 +22,9 @@ use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 Route::post('/register', [SanctumAuthController::class, 'register']);
 Route::post('/login', [SanctumAuthController::class, 'login']); // Ensure this route is used for API login
 
-// Debug routes for troubleshooting authentication issues
-Route::get('/debug/auth', function (\Illuminate\Http\Request $request) {
-    $debugInfo = [
-        'timestamp' => now()->toISOString(),
-        'request_info' => [
-            'method' => $request->method(),
-            'url' => $request->fullUrl(),
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'origin' => $request->header('Origin'),
-            'referer' => $request->header('Referer'),
-        ],
-        'headers' => [
-            'accept' => $request->header('Accept'),
-            'content_type' => $request->header('Content-Type'),
-            'x_requested_with' => $request->header('X-Requested-With'),
-            'csrf_token_header' => $request->header('X-XSRF-TOKEN') ? 'present' : 'missing',
-            'authorization' => $request->header('Authorization') ? 'present' : 'missing',
-            'cookie_header' => $request->header('Cookie') ? 'present' : 'missing',
-        ],
-        'session' => [
-            'session_id' => $request->session()->getId(),
-            'session_name' => config('session.cookie'),
-            'session_driver' => config('session.driver'),
-            'session_lifetime' => config('session.lifetime'),
-            'session_domain' => config('session.domain'),
-            'session_secure' => config('session.secure'),
-            'session_same_site' => config('session.same_site'),
-            'session_data_count' => count($request->session()->all()),
-            'csrf_token_session' => $request->session()->token(),
-        ],
-        'auth' => [
-            'auth_check' => \Illuminate\Support\Facades\Auth::check(),
-            'auth_user_id' => \Illuminate\Support\Facades\Auth::id(),
-            'auth_guard' => \Illuminate\Support\Facades\Auth::getDefaultDriver(),
-            'sanctum_user' => $request->user() ? $request->user()->id : null,
-        ],
-        'cookies' => [
-            'all_cookies' => $request->cookies->all(),
-            'session_cookie' => $request->cookies->get(config('session.cookie')),
-            'xsrf_token_cookie' => $request->cookies->get('XSRF-TOKEN'),
-        ],
-        'config' => [
-            'app_url' => config('app.url'),
-            'app_env' => config('app.env'),
-            'sanctum_stateful_domains' => config('sanctum.stateful'),
-            'cors_allowed_origins' => config('cors.allowed_origins'),
-            'cors_supports_credentials' => config('cors.supports_credentials'),
-        ]
-    ];
 
-    \Illuminate\Support\Facades\Log::info('Debug auth endpoint called', $debugInfo);
-    return response()->json($debugInfo);
-});
 
-Route::post('/debug/test-login', function (\Illuminate\Http\Request $request) {
-    $debugInfo = [
-        'timestamp' => now()->toISOString(),
-        'input' => $request->only(['email']),
-        'headers' => [
-            'origin' => $request->header('Origin'),
-            'csrf_token' => $request->header('X-XSRF-TOKEN') ? 'present' : 'missing',
-            'cookie' => $request->header('Cookie') ? 'present' : 'missing',
-        ],
-        'session_before' => [
-            'id' => $request->session()->getId(),
-            'token' => $request->session()->token(),
-            'auth_check' => \Illuminate\Support\Facades\Auth::check(),
-        ]
-    ];
 
-    if ($request->email) {
-        $user = \App\Models\User::where('email', $request->email)->first();
-        $debugInfo['user_found'] = $user ? true : false;
-        if ($user) {
-            $debugInfo['user_info'] = [
-                'id' => $user->id,
-                'email_verified' => $user->hasVerifiedEmail(),
-                'created_at' => $user->created_at,
-            ];
-        }
-    }
-
-    \Illuminate\Support\Facades\Log::info('Debug test-login called', $debugInfo);
-    return response()->json($debugInfo);
-});
 
 // Email verification routes
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verifyEmail'])
