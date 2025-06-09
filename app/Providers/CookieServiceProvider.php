@@ -3,9 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Session\Middleware\StartSession;
-use Symfony\Component\HttpFoundation\Cookie;
+use Illuminate\Cookie\CookieJar;
+use Illuminate\Http\Response;
 
 class CookieServiceProvider extends ServiceProvider
 {
@@ -14,7 +13,16 @@ class CookieServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Override the cookie jar to force SameSite=None
+        $this->app->extend('cookie', function ($cookieJar, $app) {
+            return new class($app['request'], $app['config']['app.key']) extends CookieJar {
+                public function make($name, $value, $minutes = 0, $path = null, $domain = null, $secure = null, $httpOnly = true, $raw = false, $sameSite = null)
+                {
+                    // Force SameSite=None and Secure=true for cross-origin requests
+                    return parent::make($name, $value, $minutes, $path, $domain, true, $httpOnly, $raw, 'none');
+                }
+            };
+        });
     }
 
     /**
@@ -22,21 +30,23 @@ class CookieServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Override cookie configuration for cross-origin requests
-        $this->app->resolving(EncryptCookies::class, function ($middleware) {
-            // Force SameSite=None for all cookies in production
-            $middleware->disableFor([]);
-        });
+        // Force session configuration early
+        config([
+            'session.same_site' => 'none',
+            'session.secure' => true,
+            'session.domain' => null,
+        ]);
 
-        // Override session configuration
-        $this->app->booted(function () {
-            config([
-                'session.same_site' => 'none',
-                'session.secure' => true,
-                'session.domain' => null,
-            ]);
+        // Override response macro to ensure all cookies have correct SameSite
+        Response::macro('withCookieOverride', function ($cookie) {
+            if (is_string($cookie)) {
+                $cookie = cookie($cookie);
+            }
+            
+            // Force SameSite=None and Secure=true
+            $cookie = $cookie->withSecure(true)->withSameSite('none');
+            
+            return $this->withCookie($cookie);
         });
-
-        // Cookie options are handled through Laravel's config system above
     }
 }
