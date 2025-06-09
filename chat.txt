@@ -1,1 +1,1 @@
-why you dont check the frontend since the rigester works it means the post work the proble is just get and fetch the data from backend so maybe there is soething there , can help us find the fucking problem
+still the same problem what you did didnt work
