@@ -12,6 +12,7 @@ class Kernel extends HttpKernel
      * These middleware are run during every request to your application.
      */
     protected $middleware = [
+        \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,

@@ -1,27 +1,55 @@
-🍪 Fetching CSRF cookie... page-368c9491154a7fa2.js:1:2745
+🔍 Starting login process... page-f7f8124f75b1d3d5.js:1:2353
+🌐 API URL: https://vitalupbackend-production.up.railway.app page-f7f8124f75b1d3d5.js:1:2407
 XHRGET
-https://vitalupbackend-production.up.railway.app/sanctum/csrf-cookie
-[HTTP/2 204  240ms]
+https://vitalupbackend-production.up.railway.app/api/debug/auth
+[HTTP/2 500  1381ms]
 
-🍪 CSRF Response status: 204 page-368c9491154a7fa2.js:1:2977
-🍪 CSRF Response headers:
-Object { "cache-control": "no-cache, private" }
-page-368c9491154a7fa2.js:1:3036
-🔑 CSRF Token: missing page-368c9491154a7fa2.js:1:3277
-🍪 All cookies: <empty string> page-368c9491154a7fa2.js:1:3339
-🚀 Attempting login... page-368c9491154a7fa2.js:1:3396
+🚀 Attempting token-based login... page-f7f8124f75b1d3d5.js:1:2747
 XHRPOST
 https://vitalupbackend-production.up.railway.app/api/login
-[HTTP/2 500  1189ms]
+[HTTP/2 200  700ms]
 
-Error in parsing value for ‘transform’.  Declaration dropped. signin:4:25
-🔐 Login Response status: 500 page-368c9491154a7fa2.js:1:3766
+XHROPTIONS
+https://vitalupbackend-production.up.railway.app/api/login
+[HTTP/2 204  120ms]
+
+🔐 Login Response status: 200 page-f7f8124f75b1d3d5.js:1:3029
 🔐 Login Response headers:
 Object { "cache-control": "no-cache, private", "content-type": "application/json" }
-page-368c9491154a7fa2.js:1:3826
+page-f7f8124f75b1d3d5.js:1:3089
 🔐 Login Response data:
-Object { message: "Server Error" }
-page-368c9491154a7fa2.js:1:3942
-❌ Login failed:
-Object { message: "Server Error" }
-684-7800b08412cdfbb6.js:1:107730
+Object { message: "Login successful", user: {…}, token: "29|eZD1BiTXrxUsopelSCfgjp02XkGiqbXF9qVA6wQUad685d1b", token_type: "Bearer" }
+page-f7f8124f75b1d3d5.js:1:3202
+✅ Login successful! page-f7f8124f75b1d3d5.js:1:3259
+🎫 Token received: present page-f7f8124f75b1d3d5.js:1:3294
+XHRGET
+https://vital-up-frontend.vercel.app/es/dashboard?_rsc=nek2f
+[HTTP/2 200  314ms]
+
+GET
+https://vital-up-frontend.vercel.app/_next/static/chunks/app/[locale]/dashboard/page-9267257c0ad372d5.js
+[HTTP/2 200  0ms]
+
+XHRGET
+https://vitalupbackend-production.up.railway.app/api/user
+Mixed Block
+
+GET
+https://vital-up-frontend.vercel.app/favicon.ico
+[HTTP/2 200  0ms]
+
+Blocked loading mixed active content “http://vitalupbackend-production.up.railway.app/login”
+signin
+Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://vitalupbackend-production.up.railway.app/api/user. (Reason: CORS request did not succeed). Status code: (null).
+
+❌ Error cargando dashboard: TypeError: NetworkError when attempting to fetch resource. 684-7800b08412cdfbb6.js:1:107730
+XHRGET
+http://vitalupbackend-production.up.railway.app/login
+NS_ERROR_UNEXPECTED
+
+XHRGET
+https://vital-up-frontend.vercel.app/es/quiz?_rsc=4ovuv
+[HTTP/2 200  311ms]
+
+XHRGET
+https://vital-up-frontend.vercel.app/es/challenges?_rsc=4ovuv
