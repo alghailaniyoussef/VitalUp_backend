@@ -61,8 +61,9 @@ class SanctumAuthController extends Controller
 
         return response()->json([
             'message' => 'Usuario registrado exitosamente. Por favor verifica tu email antes de iniciar sesión.',
-            'user' => $user,
-            'email_verification_required' => true
+            'user' => $user->only(['id', 'name', 'email', 'points', 'level']),
+            'email_verification_required' => true,
+            'redirect_to_login' => true
         ], 201);
     }
 
@@ -102,6 +103,10 @@ class SanctumAuthController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
+                    'points' => $user->points ?? 0,
+                    'level' => $user->level ?? 1,
+                    'is_admin' => (bool) $user->is_admin,
+                    'email_verified_at' => $user->email_verified_at,
                 ],
                 'token' => $token
             ]);
@@ -149,7 +154,12 @@ class SanctumAuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'is_admin' => $user->is_admin,
+                'points' => $user->points ?? 0,
+                'level' => $user->level ?? 1,
+                'is_admin' => (bool) $user->is_admin,
+                'email_verified_at' => $user->email_verified_at,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
             ]);
         } catch (\Exception $e) {
             Log::error('User fetch error: ' . $e->getMessage());

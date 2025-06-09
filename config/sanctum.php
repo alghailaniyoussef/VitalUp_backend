@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', 'vital-up-frontend.vercel.app,vital-up-frontend-7s2pn5jp8-youssef-ghailanis-projects.vercel.app')),
+    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', 'localhost:3000,vital-up-frontend.vercel.app')),
 
 
     /*
