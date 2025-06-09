@@ -37,7 +37,6 @@ class CookieServiceProvider extends ServiceProvider
             ]);
         });
 
-        // Set default cookie options
-        Cookie::setDefaultPathAndDomain('/', null, true, 'none');
+        // Cookie options are handled through Laravel's config system above
     }
 }
