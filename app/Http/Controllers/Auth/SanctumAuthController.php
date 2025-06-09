@@ -223,12 +223,10 @@ class SanctumAuthController extends Controller
     {
         try {
             Log::info('User endpoint called', [
-                'session_id' => $request->session()->getId(),
                 'auth_check' => Auth::check(),
                 'auth_user_id' => Auth::id(),
                 'origin' => $request->header('Origin'),
-                'csrf_token' => $request->header('X-XSRF-TOKEN') ? 'present' : 'missing',
-                'cookies' => $request->header('Cookie') ? 'present' : 'missing',
+                'authorization_header' => $request->header('Authorization') ? 'present' : 'missing',
                 'user_agent' => $request->userAgent()
             ]);
 
@@ -236,16 +234,14 @@ class SanctumAuthController extends Controller
 
             if (!$user) {
                 Log::warning('User endpoint: No authenticated user found', [
-                    'session_id' => $request->session()->getId(),
                     'auth_check' => Auth::check(),
-                    'session_data' => $request->session()->all()
+                    'authorization_header' => $request->header('Authorization') ? 'present' : 'missing'
                 ]);
                 return response()->json([
                     'error' => 'Usuario no autenticado',
                     'debug' => [
-                        'session_id' => $request->session()->getId(),
                         'auth_check' => Auth::check(),
-                        'csrf_token_present' => $request->header('X-XSRF-TOKEN') ? true : false
+                        'authorization_header_present' => $request->header('Authorization') ? true : false
                     ]
                 ], 401);
             }
@@ -263,9 +259,8 @@ class SanctumAuthController extends Controller
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at,
                 'debug' => [
-                    'session_id' => $request->session()->getId(),
                     'auth_check' => Auth::check(),
-                    'csrf_token_present' => $request->header('X-XSRF-TOKEN') ? true : false
+                    'authorization_header_present' => $request->header('Authorization') ? true : false
                 ]
             ]);
         } catch (\Exception $e) {
@@ -273,12 +268,12 @@ class SanctumAuthController extends Controller
                 'trace' => $e->getTraceAsString(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-                'session_id' => $request->session()->getId()
+                'authorization_header' => $request->header('Authorization') ? 'present' : 'missing'
             ]);
             return response()->json([
                 'error' => 'Error al obtener información del usuario',
                 'debug' => [
-                    'session_id' => $request->session()->getId(),
+                    'authorization_header_present' => $request->header('Authorization') ? true : false,
                     'error_message' => $e->getMessage()
                 ]
             ], 500);

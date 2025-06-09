@@ -1,55 +1,34 @@
-🔍 Starting login process... page-f7f8124f75b1d3d5.js:1:2353
-🌐 API URL: https://vitalupbackend-production.up.railway.app page-f7f8124f75b1d3d5.js:1:2407
-XHRGET
-https://vitalupbackend-production.up.railway.app/api/debug/auth
-[HTTP/2 500  1381ms]
-
-🚀 Attempting token-based login... page-f7f8124f75b1d3d5.js:1:2747
+🔍 Starting login process... page-1cdc8440a9456d35.js:1:2229
+🌐 API URL: https://vitalupbackend-production.up.railway.app page-1cdc8440a9456d35.js:1:2283
+🚀 Attempting token-based login... page-1cdc8440a9456d35.js:1:2371
 XHRPOST
 https://vitalupbackend-production.up.railway.app/api/login
-[HTTP/2 200  700ms]
+[HTTP/2 200  552ms]
 
-XHROPTIONS
-https://vitalupbackend-production.up.railway.app/api/login
-[HTTP/2 204  120ms]
-
-🔐 Login Response status: 200 page-f7f8124f75b1d3d5.js:1:3029
+🔐 Login Response status: 200 page-1cdc8440a9456d35.js:1:2653
 🔐 Login Response headers:
 Object { "cache-control": "no-cache, private", "content-type": "application/json" }
-page-f7f8124f75b1d3d5.js:1:3089
+page-1cdc8440a9456d35.js:1:2713
 🔐 Login Response data:
-Object { message: "Login successful", user: {…}, token: "29|eZD1BiTXrxUsopelSCfgjp02XkGiqbXF9qVA6wQUad685d1b", token_type: "Bearer" }
-page-f7f8124f75b1d3d5.js:1:3202
-✅ Login successful! page-f7f8124f75b1d3d5.js:1:3259
-🎫 Token received: present page-f7f8124f75b1d3d5.js:1:3294
+Object { message: "Login successful", user: {…}, token: "31|n6roZn2vIdFNkGts2cAWj3HMAPtbZSqxSqkNsfNw3b896691", token_type: "Bearer" }
+page-1cdc8440a9456d35.js:1:2826
+✅ Login successful! page-1cdc8440a9456d35.js:1:2883
+🎫 Token received: present page-1cdc8440a9456d35.js:1:2918
 XHRGET
 https://vital-up-frontend.vercel.app/es/dashboard?_rsc=nek2f
-[HTTP/2 200  314ms]
+[HTTP/2 200  296ms]
 
 GET
-https://vital-up-frontend.vercel.app/_next/static/chunks/app/[locale]/dashboard/page-9267257c0ad372d5.js
-[HTTP/2 200  0ms]
+https://vital-up-frontend.vercel.app/_next/static/chunks/app/[locale]/dashboard/page-063be3909d396d52.js
+[HTTP/2 200  176ms]
 
 XHRGET
 https://vitalupbackend-production.up.railway.app/api/user
-Mixed Block
+[HTTP/2 500  770ms]
 
 GET
 https://vital-up-frontend.vercel.app/favicon.ico
 [HTTP/2 200  0ms]
 
-Blocked loading mixed active content “http://vitalupbackend-production.up.railway.app/login”
-signin
-Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://vitalupbackend-production.up.railway.app/api/user. (Reason: CORS request did not succeed). Status code: (null).
-
-❌ Error cargando dashboard: TypeError: NetworkError when attempting to fetch resource. 684-7800b08412cdfbb6.js:1:107730
-XHRGET
-http://vitalupbackend-production.up.railway.app/login
-NS_ERROR_UNEXPECTED
-
-XHRGET
-https://vital-up-frontend.vercel.app/es/quiz?_rsc=4ovuv
-[HTTP/2 200  311ms]
-
-XHRGET
-https://vital-up-frontend.vercel.app/es/challenges?_rsc=4ovuv
+❌ Error cargando dashboard: Error: Not authenticated
+    NextJS 9
