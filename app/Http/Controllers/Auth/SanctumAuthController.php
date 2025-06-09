@@ -109,6 +109,8 @@ class SanctumAuthController extends Controller
     public function login(Request $req)
     {
         try {
+            Log::info('Login attempt started', ['email' => $req->email]);
+            
             $req->validate([
                 'email'    => 'required|email',
                 'password' => 'required',
@@ -117,24 +119,32 @@ class SanctumAuthController extends Controller
             $user = User::where('email', $req->email)->first();
 
             if (!$user || !Hash::check($req->password, $user->password)) {
+                Log::warning('Invalid credentials for email: ' . $req->email);
                 return response()->json(['message' => 'Credenciales incorrectas'], 401);
             }
 
             // Check if email is verified
             if (!$user->hasVerifiedEmail()) {
+                Log::info('Email not verified for user: ' . $user->email);
                 return response()->json([
                     'message' => 'Por favor verifica tu email antes de iniciar sesión.',
                     'email_verification_required' => true
                 ], 403);
             }
 
+            Log::info('Attempting to log in user', ['user_id' => $user->id]);
+            
             // Standard session-based authentication
             Auth::login($user);
             $req->session()->regenerate();
 
+            Log::info('Session regenerated, creating token');
+            
             // Create a token (optional, for API access)
             $token = $user->createToken('auth_token')->plainTextToken;
 
+            Log::info('Login successful', ['user_id' => $user->id]);
+            
             // Return success message, user info, and token
             return response()->json([
                 'message' => 'Login OK',
@@ -149,9 +159,20 @@ class SanctumAuthController extends Controller
                 ],
                 'token' => $token
             ]);
+        } catch (ValidationException $e) {
+            Log::error('Validation failed during login', ['errors' => $e->errors()]);
+            throw $e;
         } catch (\Exception $e) {
-            Log::error('Login error: ' . $e->getMessage());
-            return response()->json(['message' => 'Error de servidor al iniciar sesión'], 500);
+            Log::error('Login error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'email' => $req->email ?? 'unknown'
+            ]);
+            return response()->json([
+                'message' => 'Error de servidor al iniciar sesión',
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+            ], 500);
         }
     }
 

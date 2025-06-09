@@ -36,10 +36,10 @@ class Kernel extends HttpKernel
         'api' => [
             \App\Http\Middleware\CustomSessionConfig::class,
             \Illuminate\Cookie\Middleware\EncryptCookies::class,
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \App\Http\Middleware\CustomStartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\FixCookieHeaders::class,

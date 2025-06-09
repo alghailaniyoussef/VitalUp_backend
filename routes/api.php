@@ -20,7 +20,7 @@ use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 // Routes that don't need authentication
 Route::post('/register', [SanctumAuthController::class, 'register']);
-Route::post('/login', [SanctumAuthController::class, 'login']);
+Route::post('/login', [SanctumAuthController::class, 'login']); // Ensure this route is used for API login
 
 // Email verification routes
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verifyEmail'])

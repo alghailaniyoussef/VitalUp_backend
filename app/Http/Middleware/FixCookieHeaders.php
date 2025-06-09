@@ -18,33 +18,44 @@ class FixCookieHeaders
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
+
+        // Only apply cookie fixes for cross-origin requests
+        $origin = $request->header('Origin');
+        $isLocalhost = $request->getHost() === 'localhost' || $request->getHost() === '127.0.0.1';
+        $isCrossOrigin = $origin && !str_contains($origin, $request->getHost());
         
-        // Get all Set-Cookie headers
+        // Skip cookie fixing for same-origin requests or localhost
+        if (!$isCrossOrigin && !$isLocalhost) {
+            return $response;
+        }
+
+        // Get all cookies from the response
         $cookies = $response->headers->getCookies();
         
-        // Clear existing cookies properly
-        foreach ($cookies as $cookie) {
-            $response->headers->removeCookie($cookie->getName(), $cookie->getPath(), $cookie->getDomain());
-        }
+        // Clear existing cookies
+        $response->headers->removeCookie('laravel_session');
+        $response->headers->removeCookie('XSRF-TOKEN');
         
-        // Re-add cookies with forced SameSite=None and Secure=true
+        // Re-add cookies with proper attributes for cross-origin
         foreach ($cookies as $cookie) {
-            $response->headers->setCookie(
-                new \Symfony\Component\HttpFoundation\Cookie(
-                    $cookie->getName(),
-                    $cookie->getValue(),
-                    $cookie->getExpiresTime(),
-                    $cookie->getPath(),
-                    null, // Force domain to null for cross-origin
-                    true, // Force secure
-                    $cookie->isHttpOnly(),
-                    $cookie->isRaw(),
-                    'none' // Force SameSite=none
-                )
-            );
+            $domain = $isLocalhost ? null : $cookie->getDomain();
+            $secure = $isCrossOrigin || $request->isSecure();
+            $sameSite = $isCrossOrigin ? 'None' : 'Lax';
+            
+            $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie(
+                $cookie->getName(),
+                $cookie->getValue(),
+                $cookie->getExpiresTime(),
+                $cookie->getPath(),
+                $domain,
+                $secure,
+                $cookie->isHttpOnly(),
+                false,
+                $sameSite
+            ));
         }
-        
-        // Also manually fix Set-Cookie headers in case some are set directly
+
+        // Also fix Set-Cookie headers manually
         $setCookieHeaders = $response->headers->get('Set-Cookie', null, false);
         if ($setCookieHeaders) {
             $fixedHeaders = [];
@@ -53,15 +64,20 @@ class FixCookieHeaders
                 $header = preg_replace('/;\s*SameSite=[^;]*/i', '', $header);
                 $header = preg_replace('/;\s*Secure/i', '', $header);
                 
-                // Add our forced attributes
-                $header .= '; Secure; SameSite=None';
+                // Add appropriate attributes based on request context
+                if ($isCrossOrigin) {
+                    $header .= '; SameSite=None; Secure';
+                } else {
+                    $header .= '; SameSite=Lax';
+                    if ($request->isSecure()) {
+                        $header .= '; Secure';
+                    }
+                }
                 $fixedHeaders[] = $header;
             }
-            
-            // Replace all Set-Cookie headers
             $response->headers->set('Set-Cookie', $fixedHeaders, false);
         }
-        
+
         return $response;
     }
 }

@@ -15,16 +15,40 @@ class CustomSessionConfig
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
-        // Force session configuration for cross-origin requests
-        Config::set('session.same_site', 'none');
-        Config::set('session.secure', true);
-        Config::set('session.http_only', true);
+        // Determine if this is a cross-origin request
+        $origin = $request->header('Origin');
+        $isLocalhost = $request->getHost() === 'localhost' || $request->getHost() === '127.0.0.1';
+        $isCrossOrigin = $origin && !str_contains($origin, $request->getHost());
         
-        // Set domain to null for cross-origin requests
-        Config::set('session.domain', null);
-        
+        // Configure session settings based on request context
+        if ($isCrossOrigin) {
+            // Cross-origin requests need SameSite=None and Secure=true
+            config([
+                'session.same_site' => 'none',
+                'session.secure' => true,
+                'session.domain' => null,
+                'session.http_only' => true,
+            ]);
+        } elseif ($isLocalhost) {
+            // Localhost development settings
+            config([
+                'session.same_site' => 'lax',
+                'session.secure' => false,
+                'session.domain' => null,
+                'session.http_only' => true,
+            ]);
+        } else {
+            // Same-origin requests use default secure settings
+            config([
+                'session.same_site' => 'lax',
+                'session.secure' => $request->isSecure(),
+                'session.domain' => null,
+                'session.http_only' => true,
+            ]);
+        }
+
         return $next($request);
     }
 }
