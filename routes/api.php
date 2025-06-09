@@ -21,6 +21,7 @@ use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 // Routes that don't need authentication
 Route::post('/register', [SanctumAuthController::class, 'register']);
 Route::post('/login', [SanctumAuthController::class, 'login']); // Ensure this route is used for API login
+Route::post('/logout', [SanctumAuthController::class, 'logout'])->middleware('auth:sanctum');
 
 
 
