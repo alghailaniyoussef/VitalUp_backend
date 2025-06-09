@@ -25,11 +25,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected function inExceptArray($request)
     {
-        // For API routes, let Sanctum handle CSRF protection
-        if ($request->is('api/*')) {
-            return true;
-        }
-
+        // Don't exclude API routes - let them use CSRF protection with Sanctum
         return parent::inExceptArray($request);
     }
 
