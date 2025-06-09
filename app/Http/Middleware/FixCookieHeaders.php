@@ -22,8 +22,10 @@ class FixCookieHeaders
         // Get all Set-Cookie headers
         $cookies = $response->headers->getCookies();
         
-        // Clear existing cookies
-        $response->headers->removeCookie($response->headers->getCookies());
+        // Clear existing cookies properly
+        foreach ($cookies as $cookie) {
+            $response->headers->removeCookie($cookie->getName(), $cookie->getPath(), $cookie->getDomain());
+        }
         
         // Re-add cookies with forced SameSite=None and Secure=true
         foreach ($cookies as $cookie) {
@@ -33,7 +35,7 @@ class FixCookieHeaders
                     $cookie->getValue(),
                     $cookie->getExpiresTime(),
                     $cookie->getPath(),
-                    $cookie->getDomain(),
+                    null, // Force domain to null for cross-origin
                     true, // Force secure
                     $cookie->isHttpOnly(),
                     $cookie->isRaw(),

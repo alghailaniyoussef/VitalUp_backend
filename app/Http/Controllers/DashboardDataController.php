@@ -21,6 +21,7 @@ class DashboardDataController extends Controller
         // Extract locale from header like 'en-US' or 'es-ES'
         $locale = substr($locale, 0, 2);
         Log::info('✅ User:', [$request->user()]);
+        Log::info('dashboard'); // Success indicator for login verification
 
         return response()->json([
             'user' => [

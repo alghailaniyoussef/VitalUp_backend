@@ -17,13 +17,7 @@ class SanctumAuthController extends Controller
     public function register(Request $request)
     {
         try {
-            Log::info('Registration attempt started', [
-                'email' => $request->email,
-                'all_input' => $request->all(),
-                'content_type' => $request->header('Content-Type'),
-                'method' => $request->method(),
-                'raw_content' => $request->getContent()
-            ]);
+            Log::info('Registration attempt started', ['email' => $request->email]);
             
             $request->validate([
                 'name' => 'required|string|max:255',

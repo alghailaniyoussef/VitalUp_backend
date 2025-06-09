@@ -51,7 +51,7 @@ class VerifyCsrfToken extends Middleware
                     $request->session()->token(),
                     $this->availableAt(60 * $config['lifetime']),
                     $config['path'],
-                    $config['domain'],
+                    null, // Force domain to null for cross-origin
                     true, // secure
                     false, // httpOnly
                     false, // raw

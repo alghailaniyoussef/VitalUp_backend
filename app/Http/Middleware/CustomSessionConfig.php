@@ -22,11 +22,8 @@ class CustomSessionConfig
         Config::set('session.secure', true);
         Config::set('session.http_only', true);
         
-        // Set domain to backend domain for cross-origin
-        $backendDomain = parse_url(config('app.url'), PHP_URL_HOST);
-        if ($backendDomain) {
-            Config::set('session.domain', '.' . $backendDomain);
-        }
+        // Set domain to null for cross-origin requests
+        Config::set('session.domain', null);
         
         return $next($request);
     }

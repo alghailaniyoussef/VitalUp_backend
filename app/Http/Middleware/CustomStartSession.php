@@ -23,7 +23,7 @@ class CustomStartSession extends StartSession
                 $session->getId(),
                 $this->getCookieExpirationDate(),
                 $config['path'],
-                $config['domain'],
+                null, // Force domain to null for cross-origin
                 true, // Force secure=true
                 $config['http_only'] ?? true,
                 false,
