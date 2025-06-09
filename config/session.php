@@ -156,7 +156,7 @@ return [
     |
     */
 
-'domain' => env('SESSION_DOMAIN', null), // Set to null for cross-origin requests
+'domain' => env('SESSION_DOMAIN', null), // Must be null for cross-origin requests between different domains
 
     /*
     |--------------------------------------------------------------------------
