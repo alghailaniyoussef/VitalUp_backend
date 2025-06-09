@@ -108,109 +108,83 @@ class SanctumAuthController extends Controller
 
     public function login(Request $request)
     {
-        try {
-            Log::info('Login attempt started', [
-                'email' => $request->email,
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-                'origin' => $request->header('Origin'),
-                'referer' => $request->header('Referer'),
-                'session_id' => $request->session()->getId(),
-                'csrf_token' => $request->header('X-XSRF-TOKEN') ? 'present' : 'missing',
-                'cookies' => $request->header('Cookie') ? 'present' : 'missing'
-            ]);
+        \Log::info('🔐 Token-based login attempt started', [
+            'timestamp' => now()->toISOString(),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'origin' => $request->header('Origin'),
+            'method' => $request->method(),
+            'url' => $request->fullUrl(),
+        ]);
 
+        try {
             $request->validate([
                 'email' => 'required|email',
                 'password' => 'required',
             ]);
 
-            Log::info('Login validation passed');
+            \Log::info('🔍 Validation passed, attempting authentication');
 
-            $user = User::where('email', $request->email)->first();
+            $credentials = $request->only('email', 'password');
+            
+            \Log::info('🔑 Attempting auth with credentials', [
+                'email' => $credentials['email'],
+                'password_length' => strlen($credentials['password'])
+            ]);
 
-            if (!$user) {
-                Log::warning('Login failed: User not found', ['email' => $request->email]);
-                return response()->json(['message' => 'Credenciales incorrectas'], 401);
-            }
+            if (Auth::attempt($credentials)) {
+                \Log::info('✅ Authentication successful');
+                
+                $user = Auth::user();
+                \Log::info('👤 User authenticated', [
+                    'user_id' => $user->id,
+                    'user_email' => $user->email,
+                    'user_name' => $user->name
+                ]);
 
-            if (!Hash::check($request->password, $user->password)) {
-                Log::warning('Login failed: Invalid password', ['user_id' => $user->id, 'email' => $request->email]);
-                return response()->json(['message' => 'Credenciales incorrectas'], 401);
-            }
+                // Create Sanctum token
+                $token = $user->createToken('auth-token')->plainTextToken;
+                \Log::info('🎫 Sanctum token created successfully');
 
-            Log::info('Password verification passed', ['user_id' => $user->id]);
-
-            // Check if email is verified
-            if (!$user->hasVerifiedEmail()) {
-                Log::warning('Login failed: Email not verified', ['user_id' => $user->id]);
                 return response()->json([
-                    'message' => 'Por favor verifica tu email antes de iniciar sesión.',
-                    'email_verification_required' => true
-                ], 403);
+                    'message' => 'Login successful',
+                    'user' => [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                    ],
+                    'token' => $token,
+                    'token_type' => 'Bearer'
+                ], 200);
+            } else {
+                \Log::warning('❌ Authentication failed - invalid credentials', [
+                    'email' => $credentials['email']
+                ]);
+                
+                return response()->json([
+                    'message' => 'Invalid credentials'
+                ], 401);
             }
-
-            Log::info('Email verification check passed', ['user_id' => $user->id]);
-
-            // Login the user (this will create the session)
-            Auth::login($user);
-            $request->session()->regenerate();
-
-            Log::info('User logged in successfully', [
-                'user_id' => $user->id,
-                'session_id' => $request->session()->getId(),
-                'auth_check' => Auth::check(),
-                'auth_user_id' => Auth::id()
-            ]);
-
-            // Create a token for API access
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            Log::info('Token created successfully', ['user_id' => $user->id]);
-
-            $response = response()->json([
-                'message' => 'Login OK',
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'points' => $user->points ?? 0,
-                    'level' => $user->level ?? 1,
-                    'is_admin' => (bool) $user->is_admin,
-                    'email_verified_at' => $user->email_verified_at,
-                ],
-                'token' => $token,
-                'debug' => [
-                    'session_id' => $request->session()->getId(),
-                    'auth_check' => Auth::check(),
-                    'csrf_token_present' => $request->header('X-XSRF-TOKEN') ? true : false,
-                    'origin' => $request->header('Origin'),
-                    'user_agent' => $request->userAgent()
-                ]
-            ]);
-
-            Log::info('Login response prepared', ['user_id' => $user->id]);
-
-            return $response;
-
         } catch (ValidationException $e) {
-            Log::error('Login validation failed', ['errors' => $e->errors()]);
-            throw $e;
-        } catch (\Exception $e) {
-            Log::error('Login failed with exception: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'email' => $request->email ?? 'not provided'
+            \Log::error('❌ Validation failed', [
+                'errors' => $e->errors(),
+                'input' => $request->except('password')
             ]);
+            
             return response()->json([
-                'message' => 'Login failed. Please try again.',
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('❌ Login error', [
                 'error' => $e->getMessage(),
-                'debug' => [
-                    'session_id' => $request->session()->getId(),
-                    'origin' => $request->header('Origin'),
-                    'csrf_token_present' => $request->header('X-XSRF-TOKEN') ? true : false
-                ]
+                'trace' => $e->getTraceAsString(),
+                'input' => $request->except('password')
+            ]);
+            
+            return response()->json([
+                'message' => 'Login failed',
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -218,25 +192,30 @@ class SanctumAuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            // Get the user before we invalidate the session
-            $user = $request->user();
+            \Log::info('🚪 Token-based logout attempt started', [
+                'user_id' => Auth::id(),
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
 
-            if ($user) {
-                // Delete the current token if using token-based auth
-                if ($request->bearerToken()) {
-                    $user->currentAccessToken()->delete();
-                }
-            }
-
-            // Handle session-based logout
-            Auth::guard('web')->logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            return response()->json(['message' => 'Logged out']);
+            // Delete the current access token
+            $request->user()->currentAccessToken()->delete();
+            
+            \Log::info('✅ Token logout successful');
+            
+            return response()->json([
+                'message' => 'Logout successful'
+            ], 200);
         } catch (\Exception $e) {
-            Log::error('Logout error: ' . $e->getMessage());
-            return response()->json(['message' => 'Error de servidor al cerrar sesión'], 500);
+            \Log::error('❌ Logout error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'message' => 'Logout failed',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 

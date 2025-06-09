@@ -137,16 +137,12 @@ Route::get('/debug-middleware', [\App\Http\Controllers\DebugController::class, '
 
 // Debug route to test admin middleware specifically
 Route::middleware([
-    EnsureFrontendRequestsAreStateful::class,
     'auth:sanctum',
     'is_admin_user'
 ])->get('/debug-admin-middleware', [\App\Http\Controllers\DebugController::class, 'testAdminMiddleware']);
 
-// Group all routes that need authentication
-Route::middleware([
-    EnsureFrontendRequestsAreStateful::class,
-    'auth:sanctum'
-])->group(function () {
+// Group all routes that need authentication (token-based)
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [SanctumAuthController::class, 'user']);
     Route::get('/dashboard-data', [DashboardDataController::class, 'index']);
     Route::post('/challenge/complete', [ChallengeController::class, 'completeChallenge']);
