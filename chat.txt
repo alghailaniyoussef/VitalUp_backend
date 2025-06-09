@@ -1,1 +1,2 @@
-what the fuck ar you doing the link is right why are you changing it
+still the same problem and as ia say check railway logs to see if we a re in dashborad if not its not fixed yet
+what about the strict words in database.php and in tsconfig in frontend why you didnt check if that relevent 
