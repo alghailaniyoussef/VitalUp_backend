@@ -18,40 +18,40 @@ class SetCsrfCookie
     {
         $response = $next($request);
         
-        // Only set CSRF cookie for stateful domains
-        $statefulDomains = config('sanctum.stateful', []);
-        $origin = $request->header('Origin');
-        $referer = $request->header('Referer');
-        
-        $isStatefulRequest = false;
-        foreach ($statefulDomains as $domain) {
-            if ($origin && str_contains($origin, $domain)) {
-                $isStatefulRequest = true;
-                break;
-            }
-            if ($referer && str_contains($referer, $domain)) {
-                $isStatefulRequest = true;
-                break;
-            }
-        }
-        
-        if ($isStatefulRequest && $request->session()) {
+        // Always set cookies with SameSite=None for cross-origin requests in production
+        if ($request->session()) {
             $config = config('session');
             
-            // Create CSRF cookie with SameSite=None for cross-origin requests
-            $cookie = new Cookie(
+            // Force CSRF cookie with SameSite=None and Secure=true
+            $csrfCookie = new Cookie(
                 'XSRF-TOKEN',
                 $request->session()->token(),
                 time() + 60 * ($config['lifetime'] ?? 120),
                 $config['path'] ?? '/',
                 null, // domain = null for cross-origin
-                $config['secure'] ?? true,
+                true, // secure = true (required for SameSite=None)
                 false, // httpOnly = false (XSRF token needs to be accessible by JS)
                 false,
                 'none' // SameSite = none for cross-origin requests
             );
             
-            $response->headers->setCookie($cookie);
+            $response->headers->setCookie($csrfCookie);
+            
+            // Also ensure session cookie has correct SameSite setting
+            $sessionName = $config['cookie'] ?? 'laravel_session';
+            $sessionCookie = new Cookie(
+                $sessionName,
+                $request->session()->getId(),
+                time() + 60 * ($config['lifetime'] ?? 120),
+                $config['path'] ?? '/',
+                null, // domain = null for cross-origin
+                true, // secure = true (required for SameSite=None)
+                $config['http_only'] ?? true,
+                false,
+                'none' // SameSite = none for cross-origin requests
+            );
+            
+            $response->headers->setCookie($sessionCookie);
         }
         
         return $response;
