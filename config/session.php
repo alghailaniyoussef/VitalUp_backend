@@ -156,7 +156,7 @@ return [
     |
     */
 
-'domain' => env('SESSION_DOMAIN', null), // Make sure this is set to .localhost in .env
+'domain' => env('SESSION_DOMAIN', null), // Set to null for cross-origin requests
 
     /*
     |--------------------------------------------------------------------------
