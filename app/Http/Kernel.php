@@ -61,6 +61,7 @@ class Kernel extends HttpKernel
         'throttle'   => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified'   => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'is_admin_user' => \App\Http\Middleware\AdminMiddleware::class,
+        'csrf.cookie' => \App\Http\Middleware\SetCsrfCookie::class,
     ];
 
     /**
@@ -79,5 +80,6 @@ class Kernel extends HttpKernel
         'throttle'   => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified'   => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'is_admin_user' => \App\Http\Middleware\AdminMiddleware::class,
+        'csrf.cookie' => \App\Http\Middleware\SetCsrfCookie::class,
     ];
 }

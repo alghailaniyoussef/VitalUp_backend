@@ -11,7 +11,7 @@ Route::get('/', function () {
 
 
 
-Route::middleware('web')->get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
+Route::middleware(['web', 'csrf.cookie'])->get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 
 
 Route::middleware('web')->group(function () {
