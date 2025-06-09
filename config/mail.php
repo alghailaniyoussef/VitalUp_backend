@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    'default' => env('MAIL_MAILER', 'smtp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,21 +36,18 @@ return [
     */
 
     'mailers' => [
-        'default' => env('MAIL_MAILER', 'smtp'),
-        'mailers' => [
-            'smtp' => [
-                'transport'  => 'smtp',
-                'scheme' => env('MAIL_SCHEME'),
-                'host'       => env('MAIL_HOST', 'smtp.gmail.com'),
-                'port'       => env('MAIL_PORT', 587),
-                'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-                'url' => env('MAIL_URL'),
+        'smtp' => [
+            'transport'  => 'smtp',
+            'scheme' => env('MAIL_SCHEME'),
+            'host'       => env('MAIL_HOST', 'smtp.gmail.com'),
+            'port'       => env('MAIL_PORT', 587),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'url' => env('MAIL_URL'),
 
-                'username'   => env('MAIL_USERNAME'),
-                'password'   => env('MAIL_PASSWORD'),
-                'timeout'    => null,
-                'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
-            ],
+            'username'   => env('MAIL_USERNAME'),
+            'password'   => env('MAIL_PASSWORD'),
+            'timeout'    => null,
+            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
         ],
 
 
