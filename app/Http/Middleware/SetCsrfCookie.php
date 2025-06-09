@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
+use Illuminate\Support\Str;
 
 class SetCsrfCookie
 {
@@ -38,13 +39,13 @@ class SetCsrfCookie
             $response->headers->setCookie($csrfCookie);
             
             // Also ensure session cookie has correct SameSite setting
-            $sessionName = $config['cookie'] ?? 'laravel_session';
+            $sessionName = $config['cookie'] ?? \Illuminate\Support\Str::slug(config('app.name', 'laravel'), '_') . '_session';
             $sessionCookie = new Cookie(
                 $sessionName,
                 $request->session()->getId(),
                 time() + 60 * ($config['lifetime'] ?? 120),
                 $config['path'] ?? '/',
-                null, // domain = null for cross-origin
+                $config['domain'] ?? null, // use config domain
                 true, // secure = true (required for SameSite=None)
                 $config['http_only'] ?? true,
                 false,
