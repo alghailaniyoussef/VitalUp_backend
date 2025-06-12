@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Quiz;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class QuizSeederEs extends Seeder
 {
@@ -12,487 +14,427 @@ class QuizSeederEs extends Seeder
      */
     public function run(): void
     {
-        // Spanish quizzes
+        // VitalUp Professional Wellness Quizzes - Spanish
         $quizzes = [
             [
-                'title' => 'Fundamentos del Bienestar Mental',
-                'description' => 'Pon a prueba tus conocimientos sobre los conceptos básicos del bienestar mental y la salud psicológica.',
+                'title' => 'Fundamentos de Nutrición',
+                'description' => 'Pon a prueba tus conocimientos sobre principios esenciales de nutrición y hábitos alimentarios saludables para un bienestar óptimo.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
-                        'text' => '¿Cuál de las siguientes NO es una práctica recomendada para el bienestar mental?',
-                        'options' => [
-                            'Meditación regular',
-                            'Mantener un diario de gratitud',
-                            'Evitar buscar ayuda profesional para problemas menores',
-                            'Practicar técnicas de respiración profunda'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'Buscar ayuda profesional, incluso para problemas menores, es una práctica saludable para el bienestar mental. Ignorar los problemas puede llevar a que empeoren con el tiempo.'
+                        'text' => '¿Cuál macronutriente es la fuente principal de energía del cuerpo?',
+                        'options' => ['Proteínas', 'Carbohidratos', 'Grasas', 'Vitaminas'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 2,
-                        'text' => '¿Qué es la atención plena (mindfulness)?',
-                        'options' => [
-                            'La capacidad de hacer múltiples tareas a la vez',
-                            'Prestar atención al momento presente sin juzgar',
-                            'Planificar cuidadosamente el futuro',
-                            'Recordar eventos pasados con precisión'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'La atención plena es la práctica de prestar atención al momento presente de manera intencional y sin juzgar, observando pensamientos y sensaciones tal como son.'
+                        'text' => '¿Cuántas porciones de frutas y verduras deben consumir los adultos diariamente?',
+                        'options' => ['3-4 porciones', '5-9 porciones', '1-2 porciones', '10+ porciones'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 3,
-                        'text' => '¿Cuál de los siguientes es un beneficio respaldado científicamente de la meditación regular?',
-                        'options' => [
-                            'Eliminación completa del estrés',
-                            'Reducción de la presión arterial',
-                            'Curación de todas las enfermedades mentales',
-                            'Capacidad para predecir eventos futuros'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'Estudios científicos han demostrado que la meditación regular puede ayudar a reducir la presión arterial, entre otros beneficios para la salud como reducción del estrés y mejora del enfoque.'
+                        'text' => '¿Cuál es la ingesta diaria recomendada de agua para adultos?',
+                        'options' => ['4-6 vasos', '8-10 vasos', '2-3 vasos', '12+ vasos'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 4,
-                        'text' => '¿Qué es la resiliencia emocional?',
-                        'options' => [
-                            'La capacidad de evitar todas las emociones negativas',
-                            'La capacidad de recuperarse de la adversidad y adaptarse al cambio',
-                            'La habilidad de ocultar tus verdaderos sentimientos',
-                            'La tendencia a experimentar solo emociones positivas'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'La resiliencia emocional es la capacidad de adaptarse a situaciones estresantes o desafiantes y recuperarse de la adversidad y los traumas.'
+                        'text' => '¿Qué nutriente es esencial para la reparación y crecimiento muscular?',
+                        'options' => ['Carbohidratos', 'Vitaminas', 'Proteína', 'Minerales'],
+                        'correct_answer' => 2
                     ],
                     [
                         'id' => 5,
-                        'text' => '¿Cuál de las siguientes actividades puede ayudar a reducir los síntomas de ansiedad?',
-                        'options' => [
-                            'Consumir más cafeína',
-                            'Reducir las horas de sueño',
-                            'Ejercicio físico regular',
-                            'Pasar más tiempo en redes sociales'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'El ejercicio físico regular ha demostrado ser efectivo para reducir los síntomas de ansiedad al liberar endorfinas y otros neurotransmisores que mejoran el estado de ánimo.'
+                        'text' => '¿Qué porcentaje de tu plato debe llenarse con verduras?',
+                        'options' => ['25%', '50%', '75%', '10%'],
+                        'correct_answer' => 1
                     ]
                 ]),
                 'points_per_question' => 10,
                 'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'es',
+                'icon_path' => 'trophy'
             ],
             [
-                'title' => 'Nutrición y Bienestar',
-                'description' => 'Evalúa tu comprensión de los principios básicos de nutrición y cómo afectan a tu bienestar general.',
+                'title' => 'Conciencia de Salud Mental',
+                'description' => 'Explora conceptos clave en salud mental y manejo del estrés para un mejor bienestar psicológico.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
-                        'text' => '¿Cuál de los siguientes NO es un macronutriente?',
-                        'options' => [
-                            'Proteínas',
-                            'Grasas',
-                            'Vitaminas',
-                            'Carbohidratos'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'Las vitaminas son micronutrientes, no macronutrientes. Los macronutrientes son nutrientes que el cuerpo necesita en grandes cantidades: proteínas, grasas y carbohidratos.'
+                        'text' => '¿Qué práctica es más efectiva para reducir el estrés diario?',
+                        'options' => ['Ejercicios de respiración profunda', 'Ver televisión', 'Comer comida reconfortante', 'Trabajar más horas'],
+                        'correct_answer' => 0
                     ],
                     [
                         'id' => 2,
-                        'text' => '¿Qué significa el término "dieta antiinflamatoria"?',
-                        'options' => [
-                            'Una dieta que elimina todos los carbohidratos',
-                            'Una dieta que se enfoca en alimentos que reducen la inflamación en el cuerpo',
-                            'Una dieta que solo incluye alimentos crudos',
-                            'Una dieta que requiere ayuno intermitente'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'Una dieta antiinflamatoria se enfoca en consumir alimentos que ayudan a reducir la inflamación en el cuerpo, como frutas, verduras, grasas saludables y especias antiinflamatorias.'
+                        'text' => '¿Cuántas horas de sueño necesitan la mayoría de adultos por noche?',
+                        'options' => ['5-6 horas', '7-9 horas', '10-12 horas', '4-5 horas'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 3,
-                        'text' => '¿Cuál es la recomendación general para el consumo diario de agua?',
-                        'options' => [
-                            'Al menos 8 vasos (aproximadamente 2 litros) para la mayoría de los adultos',
-                            'Exactamente 1 litro para todos los adultos',
-                            'Solo beber cuando se tiene sed',
-                            'Al menos 4 litros para todos los adultos'
-                        ],
-                        'correct_answer' => 0,
-                        'explanation' => 'La recomendación general es consumir aproximadamente 8 vasos (2 litros) de agua al día, aunque las necesidades individuales pueden variar según el peso, la actividad física y el clima.'
+                        'text' => '¿Cuál es una forma saludable de lidiar con la ansiedad?',
+                        'options' => ['Evitar todas las situaciones estresantes', 'Meditación mindfulness', 'Aislarse', 'Ignorar los sentimientos'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 4,
-                        'text' => '¿Qué son los probióticos?',
-                        'options' => [
-                            'Suplementos vitamínicos sintéticos',
-                            'Microorganismos vivos que proporcionan beneficios para la salud cuando se consumen en cantidades adecuadas',
-                            'Proteínas que ayudan a construir músculo',
-                            'Carbohidratos complejos que proporcionan energía duradera'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'Los probióticos son microorganismos vivos (principalmente bacterias beneficiosas) que, cuando se consumen en cantidades adecuadas, proporcionan beneficios para la salud, especialmente para la digestión.'
+                        'text' => '¿Qué actividad puede mejorar la claridad mental?',
+                        'options' => ['Ejercicio regular', 'Cafeína excesiva', 'Saltarse comidas', 'Quedarse en interiores'],
+                        'correct_answer' => 0
                     ],
                     [
                         'id' => 5,
-                        'text' => '¿Cuál de los siguientes alimentos es la mejor fuente de ácidos grasos omega-3?',
-                        'options' => [
-                            'Pollo',
-                            'Arroz blanco',
-                            'Pescado graso (como salmón o caballa)',
-                            'Leche entera'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'Los pescados grasos como el salmón, la caballa y las sardinas son excelentes fuentes de ácidos grasos omega-3, que son importantes para la salud del corazón y el cerebro.'
+                        'text' => '¿Cuál es el beneficio de mantener un diario de gratitud?',
+                        'options' => ['Mejora la memoria', 'Mejora el pensamiento positivo', 'Aumenta el apetito', 'Reduce el sueño'],
+                        'correct_answer' => 1
                     ]
                 ]),
                 'points_per_question' => 10,
                 'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'es',
+                'icon_path' => 'brain'
             ],
             [
-                'title' => 'Sostenibilidad y Vida Ecológica',
-                'description' => 'Pon a prueba tus conocimientos sobre prácticas sostenibles y cómo vivir de manera más ecológica.',
+                'title' => 'Fundamentos de Fitness',
+                'description' => 'Pon a prueba tu comprensión de los principios del ejercicio y la aptitud física para un estilo de vida más saludable.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
-                        'text' => '¿Cuál de las siguientes acciones tiene el MAYOR impacto positivo en la reducción de la huella de carbono personal?',
-                        'options' => [
-                            'Usar bolsas reutilizables para la compra',
-                            'Reducir significativamente el consumo de carne',
-                            'Apagar las luces cuando no se usan',
-                            'Reciclar papel y plástico'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'Aunque todas estas acciones son beneficiosas, reducir significativamente el consumo de carne (especialmente carne de res) tiene el mayor impacto en la reducción de la huella de carbono personal debido a las altas emisiones asociadas con la ganadería.'
+                        'text' => '¿Cuántos minutos de ejercicio moderado deben hacer los adultos por semana?',
+                        'options' => ['75 minutos', '150 minutos', '300 minutos', '30 minutos'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 2,
-                        'text' => '¿Qué significa el término "economía circular"?',
-                        'options' => [
-                            'Un sistema económico que solo utiliza monedas como medio de intercambio',
-                            'Un modelo económico que prioriza el crecimiento continuo',
-                            'Un sistema que minimiza los residuos y maximiza la reutilización de recursos',
-                            'Una economía basada exclusivamente en energías renovables'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'La economía circular es un modelo económico que busca redefinir el crecimiento, centrándose en los beneficios positivos para toda la sociedad. Implica disociar la actividad económica del consumo de recursos finitos y eliminar los residuos del sistema.'
+                        'text' => '¿Qué tipo de ejercicio es mejor para la salud cardiovascular?',
+                        'options' => ['Solo levantamiento de pesas', 'Ejercicio aeróbico', 'Solo estiramientos', 'Solo yoga'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 3,
-                        'text' => '¿Cuál de los siguientes NO es un beneficio de la agricultura urbana?',
-                        'options' => [
-                            'Reducción de las millas de alimentos',
-                            'Mejora de la calidad del aire',
-                            'Aumento de la biodiversidad local',
-                            'Eliminación de la necesidad de pesticidas'
-                        ],
-                        'correct_answer' => 3,
-                        'explanation' => 'Aunque la agricultura urbana tiene muchos beneficios, no elimina automáticamente la necesidad de pesticidas. Incluso los jardines urbanos pueden enfrentar plagas y enfermedades, aunque se pueden utilizar métodos orgánicos y de control integrado de plagas.'
+                        'text' => '¿Cuándo es el mejor momento para estirar?',
+                        'options' => ['Solo antes del ejercicio', 'Después del calentamiento', 'Nunca', 'Solo cuando hay lesión'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 4,
-                        'text' => '¿Qué es el "greenwashing"?',
-                        'options' => [
-                            'Una técnica para limpiar edificios con productos ecológicos',
-                            'La práctica de hacer que un producto parezca más ecológico de lo que realmente es',
-                            'Un método para purificar agua usando plantas',
-                            'El proceso de convertir espacios urbanos en áreas verdes'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'El "greenwashing" es una forma de marketing engañoso donde una empresa gasta más tiempo y dinero en promocionarse como ecológica que en minimizar su impacto ambiental real.'
+                        'text' => '¿Cuál es el tiempo de descanso recomendado entre sesiones de entrenamiento de fuerza?',
+                        'options' => ['No se necesita descanso', '24-48 horas', '1 semana', '10 minutos'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 5,
-                        'text' => '¿Cuál es el principal problema ambiental asociado con los microplásticos?',
-                        'options' => [
-                            'Son altamente inflamables',
-                            'Emiten gases de efecto invernadero',
-                            'Persisten en el medio ambiente y entran en la cadena alimentaria',
-                            'Consumen grandes cantidades de agua durante su producción'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'Los microplásticos son extremadamente persistentes en el medio ambiente y pueden ser ingeridos por organismos marinos, entrando así en la cadena alimentaria. Pueden transportar contaminantes y representan una amenaza para la vida silvestre y potencialmente para la salud humana.'
+                        'text' => '¿Cuál es una señal de sobreentrenamiento?',
+                        'options' => ['Aumento de energía', 'Mejor sueño', 'Fatiga persistente', 'Mejor estado de ánimo'],
+                        'correct_answer' => 2
                     ]
                 ]),
                 'points_per_question' => 10,
                 'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'es',
+                'icon_path' => 'muscle'
             ],
             [
-                'title' => 'Inteligencia Financiera',
-                'description' => 'Evalúa tu conocimiento sobre conceptos financieros básicos y hábitos de dinero inteligentes.',
+                'title' => 'Optimización del Sueño',
+                'description' => 'Aprende sobre hábitos de sueño saludables y su impacto en el bienestar general y el rendimiento diario.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
-                        'text' => '¿Qué es un presupuesto de base cero?',
-                        'options' => [
-                            'Un presupuesto donde no gastas nada',
-                            'Un presupuesto donde justificas cada gasto desde cero cada período',
-                            'Un presupuesto que solo incluye gastos esenciales',
-                            'Un presupuesto donde ahorras el 100% de tus ingresos'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'Un presupuesto de base cero es un método donde justificas todos los gastos para cada nuevo período, comenzando desde cero, en lugar de basar tu presupuesto en el del período anterior.'
+                        'text' => '¿Cuál es la temperatura ideal del dormitorio para dormir?',
+                        'options' => ['75-80°F', '60-67°F', '50-55°F', '80-85°F'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 2,
-                        'text' => '¿Cuál es la regla 50/30/20 para el presupuesto personal?',
-                        'options' => [
-                            '50% para inversiones, 30% para gastos, 20% para ahorros',
-                            '50% para necesidades, 30% para deseos, 20% para ahorros y deudas',
-                            '50% para impuestos, 30% para vivienda, 20% para todo lo demás',
-                            '50% para alimentos, 30% para transporte, 20% para entretenimiento'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'La regla 50/30/20 sugiere asignar el 50% de tus ingresos después de impuestos a necesidades, el 30% a deseos y el 20% a ahorros y pago de deudas.'
+                        'text' => '¿Cuánto tiempo antes de acostarse debes evitar las pantallas?',
+                        'options' => ['30 minutos', '1 hora', '3 horas', '5 minutos'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 3,
-                        'text' => '¿Qué es el interés compuesto?',
-                        'options' => [
-                            'Un tipo de préstamo con tasas de interés muy altas',
-                            'Interés que se calcula solo sobre el capital inicial',
-                            'Interés que se calcula sobre el capital inicial más el interés acumulado',
-                            'Un bono que pagan los bancos por mantener grandes sumas de dinero'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'El interés compuesto es el interés que se calcula no solo sobre el capital inicial sino también sobre el interés acumulado de períodos anteriores. Es a menudo descrito como "interés sobre interés".'
+                        'text' => '¿Qué bebida debe evitarse antes de acostarse?',
+                        'options' => ['Té de hierbas', 'Agua', 'Café', 'Leche tibia'],
+                        'correct_answer' => 2
                     ],
                     [
                         'id' => 4,
-                        'text' => '¿Cuál de las siguientes NO es generalmente una buena estrategia para la salud financiera?',
-                        'options' => [
-                            'Mantener un fondo de emergencia',
-                            'Diversificar inversiones',
-                            'Usar el crédito para compras diarias y pagar solo el mínimo',
-                            'Contribuir regularmente a un plan de jubilación'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'Usar tarjetas de crédito para gastos diarios y pagar solo el mínimo cada mes puede llevar a acumular deudas significativas debido a las altas tasas de interés, afectando negativamente tu salud financiera a largo plazo.'
+                        'text' => '¿Qué es la higiene del sueño?',
+                        'options' => ['Ducharse antes de acostarse', 'Prácticas que promueven un buen sueño', 'Limpiar tu dormitorio', 'Lavar las sábanas'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 5,
-                        'text' => '¿Qué es la inflación?',
-                        'options' => [
-                            'El aumento en el valor de una moneda',
-                            'El aumento general en los precios y la caída en el poder adquisitivo del dinero',
-                            'La tasa a la que aumentan los salarios',
-                            'El proceso de invertir en múltiples clases de activos'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'La inflación es el aumento general en los precios de bienes y servicios en una economía a lo largo del tiempo, lo que resulta en una disminución del poder adquisitivo de la moneda.'
+                        'text' => '¿Qué actividad puede mejorar la calidad del sueño?',
+                        'options' => ['Ejercicio nocturno', 'Horario regular de sueño', 'Comidas grandes antes de acostarse', 'Luces brillantes'],
+                        'correct_answer' => 1
                     ]
                 ]),
                 'points_per_question' => 10,
                 'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'es',
+                'icon_path' => 'star'
             ],
             [
-                'title' => 'Conexiones Sociales Saludables',
-                'description' => 'Evalúa tu comprensión de las relaciones saludables y las habilidades de comunicación efectiva.',
+                'title' => 'Manejo del Estrés',
+                'description' => 'Descubre estrategias efectivas para manejar el estrés y mantener el equilibrio emocional en la vida diaria.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
-                        'text' => '¿Cuál de las siguientes es una característica de la escucha activa?',
-                        'options' => [
-                            'Interrumpir para mostrar entusiasmo',
-                            'Formular tu respuesta mientras la otra persona habla',
-                            'Parafrasear lo que has escuchado para verificar la comprensión',
-                            'Cambiar rápidamente el tema a algo relacionado contigo'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'La escucha activa implica prestar plena atención al hablante y parafrasear o resumir lo que has escuchado para verificar que has entendido correctamente, mostrando que valoras lo que la otra persona está comunicando.'
+                        'text' => '¿Cuál es un síntoma físico del estrés crónico?',
+                        'options' => ['Mejor digestión', 'Mejor sueño', 'Tensión muscular', 'Aumento de energía'],
+                        'correct_answer' => 2
                     ],
                     [
                         'id' => 2,
-                        'text' => '¿Qué es la inteligencia emocional?',
-                        'options' => [
-                            'La capacidad de manipular las emociones de los demás',
-                            'La capacidad de suprimir todas las emociones negativas',
-                            'La capacidad de reconocer, entender y manejar tus propias emociones y las de los demás',
-                            'Un término científico para el coeficiente intelectual (CI)'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'La inteligencia emocional es la capacidad de reconocer, entender y manejar nuestras propias emociones, así como reconocer, entender e influir en las emociones de los demás. Es crucial para las relaciones interpersonales efectivas.'
+                        'text' => '¿Qué es la técnica de respiración 4-7-8?',
+                        'options' => ['Inhalar 4, mantener 7, exhalar 8', 'Ejercitarse por 4-7-8 minutos', 'Comer 4-7-8 veces al día', 'Dormir 4-7-8 horas'],
+                        'correct_answer' => 0
                     ],
                     [
                         'id' => 3,
-                        'text' => '¿Cuál de las siguientes es una señal de una relación saludable?',
-                        'options' => [
-                            'Uno de los socios toma todas las decisiones importantes',
-                            'Los socios mantienen secretos importantes entre sí',
-                            'Los socios respetan los límites y la autonomía del otro',
-                            'Los socios evitan todos los conflictos y desacuerdos'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'En las relaciones saludables, los socios respetan los límites y la autonomía del otro, permitiendo espacio para la individualidad mientras mantienen una conexión fuerte. El respeto mutuo es fundamental para una relación saludable.'
+                        'text' => '¿Qué actividad NO se recomienda para el alivio del estrés?',
+                        'options' => ['Meditación', 'Ejercicio', 'Consumo excesivo de alcohol', 'Respiración profunda'],
+                        'correct_answer' => 2
                     ],
                     [
                         'id' => 4,
-                        'text' => '¿Qué es la comunicación asertiva?',
-                        'options' => [
-                            'Comunicar tus necesidades y límites de manera clara y respetuosa',
-                            'Siempre estar de acuerdo con los demás para evitar conflictos',
-                            'Usar un tono agresivo para asegurarte de que te escuchen',
-                            'Comunicar indirectamente a través de insinuaciones y pistas'
-                        ],
-                        'correct_answer' => 0,
-                        'explanation' => 'La comunicación asertiva implica expresar tus pensamientos, sentimientos, necesidades y límites de manera directa, honesta y respetuosa, mientras también respetas los derechos y límites de los demás.'
+                        'text' => '¿Qué es la relajación muscular progresiva?',
+                        'options' => ['Correr progresivamente más rápido', 'Tensar y relajar grupos musculares', 'Levantar pesas más pesadas', 'Estirarse por horas'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 5,
-                        'text' => '¿Cuál de las siguientes NO es una estrategia efectiva para resolver conflictos?',
-                        'options' => [
-                            'Practicar la escucha activa',
-                            'Usar declaraciones "yo" en lugar de acusaciones',
-                            'Esperar a que te calmes antes de abordar el problema',
-                            'Involucrar a otras personas para que tomen partido'
-                        ],
-                        'correct_answer' => 3,
-                        'explanation' => 'Involucrar a otros para que tomen partido en un conflicto generalmente lo escala y complica, en lugar de resolverlo. La resolución efectiva de conflictos se centra en la comunicación directa y respetuosa entre las partes involucradas.'
+                        'text' => '¿Cómo puede la gestión del tiempo ayudar a reducir el estrés?',
+                        'options' => ['Trabajando más horas', 'Priorizando tareas', 'Evitando todas las responsabilidades', 'Multitarea constante'],
+                        'correct_answer' => 1
                     ]
                 ]),
                 'points_per_question' => 10,
                 'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'es',
+                'icon_path' => 'shield'
             ],
             [
-                'title' => 'Fundamentos de Ejercicio Físico',
-                'description' => 'Aprende sobre los principios del ejercicio, componentes de la aptitud física y patrones de movimiento saludables.',
+                'title' => 'Hidratación y Salud',
+                'description' => 'Comprende la importancia de la hidratación adecuada y sus efectos en las funciones corporales y el bienestar.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
-                        'text' => '¿Cuál es la frecuencia recomendada de ejercicio cardiovascular para adultos?',
-                        'options' => [
-                            'Una vez por semana',
-                            'Al menos 150 minutos de intensidad moderada por semana',
-                            'Solo los fines de semana',
-                            'Todos los días durante 2 horas'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'Los adultos deben realizar al menos 150 minutos de actividad aeróbica de intensidad moderada por semana, según las recomendaciones de salud.'
+                        'text' => '¿Qué porcentaje del cuerpo humano es agua?',
+                        'options' => ['45%', '60%', '75%', '90%'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 2,
-                        'text' => '¿Qué tipo de ejercicio es mejor para fortalecer los huesos?',
-                        'options' => [
-                            'Natación',
-                            'Ejercicios de resistencia con pesas',
-                            'Yoga suave',
-                            'Ciclismo'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'Los ejercicios de resistencia con pesas son especialmente efectivos para fortalecer los huesos y prevenir la osteoporosis.'
+                        'text' => '¿Cuál es una señal de deshidratación?',
+                        'options' => ['Orina clara', 'Aumento de energía', 'Orina amarilla oscura', 'Mejor concentración'],
+                        'correct_answer' => 2
                     ],
                     [
                         'id' => 3,
-                        'text' => '¿Cuánto tiempo debe durar un calentamiento antes del ejercicio?',
-                        'options' => [
-                            '2-3 minutos',
-                            '5-10 minutos',
-                            '15-20 minutos',
-                            'No es necesario calentar'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'Un calentamiento de 5-10 minutos es ideal para preparar el cuerpo para el ejercicio y reducir el riesgo de lesiones.'
+                        'text' => '¿Cuándo debes beber más agua?',
+                        'options' => ['Solo cuando tengas sed', 'Durante el ejercicio', 'Nunca', 'Solo con las comidas'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 4,
+                        'text' => '¿Qué bebida contribuye más a la hidratación?',
+                        'options' => ['Café', 'Refresco', 'Agua', 'Bebidas energéticas'],
+                        'correct_answer' => 2
+                    ],
+                    [
+                        'id' => 5,
+                        'text' => '¿Cómo afecta la hidratación adecuada a la salud de la piel?',
+                        'options' => ['La hace grasa', 'Mejora la elasticidad', 'Causa brotes', 'No tiene efecto'],
+                        'correct_answer' => 1
                     ]
                 ]),
                 'points_per_question' => 10,
                 'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'es',
-            ],
-            [
-                'title' => 'Ciencia del Sueño y Recuperación',
-                'description' => 'Aprende sobre los ciclos del sueño, procesos de recuperación y cómo optimizar el descanso para una mejor salud.',
-                'questions' => json_encode([
-                    [
-                        'id' => 1,
-                        'text' => '¿Cuántas horas de sueño necesitan la mayoría de los adultos por noche?',
-                        'options' => [
-                            '5-6 horas',
-                            '7-9 horas',
-                            '10-12 horas',
-                            '4-5 horas'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'La mayoría de los adultos necesitan entre 7-9 horas de sueño por noche para un funcionamiento óptimo.'
-                    ],
-                    [
-                        'id' => 2,
-                        'text' => '¿Qué fase del sueño es más importante para la consolidación de la memoria?',
-                        'options' => [
-                            'Sueño ligero',
-                            'Sueño REM',
-                            'Despertar',
-                            'Transición al sueño'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'El sueño REM es crucial para la consolidación de la memoria y el procesamiento emocional.'
-                    ],
-                    [
-                        'id' => 3,
-                        'text' => '¿Cuál es el mejor momento para evitar la cafeína si quieres dormir bien?',
-                        'options' => [
-                            '1 hora antes de dormir',
-                            '6-8 horas antes de dormir',
-                            'Solo por la mañana',
-                            'No importa el momento'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'La cafeína puede permanecer en el sistema durante 6-8 horas, por lo que es mejor evitarla en ese período antes de dormir.'
-                    ]
-                ]),
-                'points_per_question' => 10,
-                'is_active' => true,
-                'locale' => 'es',
+                'icon_path' => 'heart'
             ],
             [
                 'title' => 'Bienestar Ambiental',
-                'description' => 'Comprende cómo los factores ambientales impactan la salud y aprende prácticas de vida sostenible.',
+                'description' => 'Explora cómo tu entorno afecta tu salud y aprende prácticas de vida sostenible.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
-                        'text' => '¿Cuál de las siguientes acciones tiene el mayor impacto en la reducción de la huella de carbono personal?',
-                        'options' => [
-                            'Reciclar papel',
-                            'Reducir el consumo de carne',
-                            'Usar bombillas LED',
-                            'Tomar duchas más cortas'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'Reducir el consumo de carne, especialmente carne roja, tiene uno de los mayores impactos en la reducción de la huella de carbono personal.'
+                        'text' => '¿Qué práctica reduce el impacto ambiental y mejora la salud?',
+                        'options' => ['Conducir a todas partes', 'Caminar o andar en bicicleta', 'Usar artículos desechables', 'Comer alimentos procesados'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 2,
-                        'text' => '¿Qué porcentaje del aire interior puede estar más contaminado que el aire exterior?',
-                        'options' => [
-                            'El aire interior siempre es más limpio',
-                            '2-5 veces más contaminado',
-                            'Igual de contaminado',
-                            'Solo en invierno'
-                        ],
-                        'correct_answer' => 1,
-                        'explanation' => 'El aire interior puede estar 2-5 veces más contaminado que el aire exterior debido a productos químicos, polvo y falta de ventilación.'
+                        'text' => '¿Cuál es el beneficio de las plantas de interior?',
+                        'options' => ['Aumentan la humedad', 'Mejoran la calidad del aire', 'Reducen el ruido', 'Todas las anteriores'],
+                        'correct_answer' => 3
                     ],
                     [
                         'id' => 3,
-                        'text' => '¿Cuál es una forma efectiva de mejorar la calidad del aire interior?',
-                        'options' => [
-                            'Usar más productos de limpieza',
-                            'Mantener las ventanas siempre cerradas',
-                            'Añadir plantas purificadoras de aire',
-                            'Usar ambientadores sintéticos'
-                        ],
-                        'correct_answer' => 2,
-                        'explanation' => 'Las plantas como la sansevieria, pothos y peace lily pueden ayudar a purificar el aire interior de forma natural.'
+                        'text' => '¿Cuál es una elección alimentaria sostenible?',
+                        'options' => ['Alimentos altamente procesados', 'Productos locales de temporada', 'Frutas exóticas importadas', 'Comida rápida'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 4,
+                        'text' => '¿Cómo beneficia pasar tiempo en la naturaleza a la salud?',
+                        'options' => ['Reduce el estrés', 'Mejora el estado de ánimo', 'Fortalece el sistema inmune', 'Todas las anteriores'],
+                        'correct_answer' => 3
+                    ],
+                    [
+                        'id' => 5,
+                        'text' => '¿Cuál es la mejor manera de reducir los residuos plásticos?',
+                        'options' => ['Usar más artículos desechables', 'Elegir alternativas reutilizables', 'Ignorar el problema', 'Comprar más productos plásticos'],
+                        'correct_answer' => 1
                     ]
                 ]),
                 'points_per_question' => 10,
                 'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'es',
+                'icon_path' => 'crown'
+            ],
+            [
+                'title' => 'Mindfulness y Meditación',
+                'description' => 'Aprende sobre prácticas de mindfulness y técnicas de meditación para la claridad mental y la paz.',
+                'questions' => json_encode([
+                    [
+                        'id' => 1,
+                        'text' => '¿Qué es mindfulness?',
+                        'options' => ['Pensar en el futuro', 'Estar presente en el momento', 'Multitarea', 'Evitar pensamientos'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 2,
+                        'text' => '¿Cuánto tiempo deben meditar los principiantes?',
+                        'options' => ['2 horas', '5-10 minutos', '30 segundos', '1 hora'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 3,
+                        'text' => '¿Cuál es un beneficio de la meditación regular?',
+                        'options' => ['Aumento de ansiedad', 'Mejor enfoque', 'Más estrés', 'Menos sueño'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 4,
+                        'text' => '¿Qué debes hacer cuando tu mente divaga durante la meditación?',
+                        'options' => ['Frustrarte', 'Dejar de meditar', 'Regresar suavemente el enfoque a la respiración', 'Pensar más fuerte'],
+                        'correct_answer' => 2
+                    ],
+                    [
+                        'id' => 5,
+                        'text' => '¿Qué ambiente es mejor para la meditación?',
+                        'options' => ['Ruidoso y brillante', 'Silencioso y cómodo', 'Mientras conduces', 'Durante reuniones'],
+                        'correct_answer' => 1
+                    ]
+                ]),
+                'points_per_question' => 10,
+                'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
+                'locale' => 'es',
+                'icon_path' => 'lightning'
+            ],
+            [
+                'title' => 'Equilibrio Trabajo-Vida',
+                'description' => 'Descubre estrategias para mantener límites saludables entre el trabajo y la vida personal.',
+                'questions' => json_encode([
+                    [
+                        'id' => 1,
+                        'text' => '¿Cuál es una señal de mal equilibrio trabajo-vida?',
+                        'options' => ['Ejercicio regular', 'Agotamiento crónico', 'Buenas relaciones', 'Sueño adecuado'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 2,
+                        'text' => '¿Qué práctica ayuda a mantener el equilibrio trabajo-vida?',
+                        'options' => ['Trabajar fines de semana', 'Establecer límites', 'Saltarse descansos', 'Revisar emails constantemente'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 3,
+                        'text' => '¿Cómo puedes desconectarte del trabajo en casa?',
+                        'options' => ['Mantener emails del trabajo abiertos', 'Crear un espacio de trabajo dedicado', 'Trabajar en la cama', 'Nunca tomar descansos'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 4,
+                        'text' => '¿Cuál es el beneficio de tomar descansos regulares?',
+                        'options' => ['Disminución de productividad', 'Mejor enfoque', 'Más estrés', 'Menos creatividad'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 5,
+                        'text' => '¿Qué actividad apoya el equilibrio trabajo-vida?',
+                        'options' => ['Trabajar durante el almuerzo', 'Practicar pasatiempos', 'Quedarse tarde todos los días', 'Saltarse vacaciones'],
+                        'correct_answer' => 1
+                    ]
+                ]),
+                'points_per_question' => 10,
+                'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
+                'locale' => 'es',
+                'icon_path' => 'target'
+            ],
+            [
+                'title' => 'Formación de Hábitos Saludables',
+                'description' => 'Aprende la ciencia detrás de la formación de hábitos y estrategias para construir comportamientos saludables duraderos.',
+                'questions' => json_encode([
+                    [
+                        'id' => 1,
+                        'text' => '¿Cuánto tiempo toma típicamente formar un nuevo hábito?',
+                        'options' => ['7 días', '21-66 días', '1 año', '3 días'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 2,
+                        'text' => '¿Cuál es la forma más efectiva de construir un nuevo hábito?',
+                        'options' => ['Empezar con grandes cambios', 'Comenzar con acciones pequeñas y consistentes', 'Hacerlo perfectamente siempre', 'Esperar motivación'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 3,
+                        'text' => '¿Qué estrategia ayuda a mantener nuevos hábitos?',
+                        'options' => ['Apilamiento de hábitos', 'Hacerlo aleatoriamente', 'Evitar recordatorios', 'Hacerlo complicado'],
+                        'correct_answer' => 0
+                    ],
+                    [
+                        'id' => 4,
+                        'text' => '¿Qué debes hacer cuando te saltas un día de tu nuevo hábito?',
+                        'options' => ['Rendirte completamente', 'Retomar al día siguiente', 'Esperar hasta el próximo mes', 'Sentirte culpable por semanas'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 5,
+                        'text' => '¿Qué factor es más importante para el éxito de un hábito?',
+                        'options' => ['Perfección', 'Consistencia', 'Velocidad', 'Complejidad'],
+                        'correct_answer' => 1
+                    ]
+                ]),
+                'points_per_question' => 10,
+                'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
+                'locale' => 'es',
+                'icon_path' => 'rocket'
             ]
         ];
 

@@ -19,11 +19,11 @@ class QuizSeeder extends Seeder
         Quiz::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        // VitalUp Professional Wellness Quizzes
+        // VitalUp Professional Wellness Quizzes - English
         $quizzes = [
             [
                 'title' => 'Nutrition Fundamentals',
-                'description' => 'Test your knowledge about essential nutrition principles and healthy eating habits.',
+                'description' => 'Test your knowledge about essential nutrition principles and healthy eating habits for optimal wellness.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
@@ -51,7 +51,7 @@ class QuizSeeder extends Seeder
                     ],
                     [
                         'id' => 5,
-                        'text' => 'What percentage of your plate should be filled with vegetables according to healthy eating guidelines?',
+                        'text' => 'What percentage of your plate should be filled with vegetables?',
                         'options' => ['25%', '50%', '75%', '10%'],
                         'correct_answer' => 1
                     ]
@@ -61,51 +61,53 @@ class QuizSeeder extends Seeder
                 'available_from' => Carbon::now(),
                 'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'en',
+                'icon_path' => 'trophy'
             ],
             [
-                'title' => 'Mental Wellness Basics',
-                'description' => 'Explore fundamental concepts of mental health and stress management techniques.',
+                'title' => 'Mental Health Awareness',
+                'description' => 'Explore key concepts in mental health and stress management for better psychological well-being.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
-                        'text' => 'What is the recommended duration for daily meditation for beginners?',
-                        'options' => ['5-10 minutes', '30-45 minutes', '1-2 hours', '2-3 minutes'],
+                        'text' => 'Which practice is most effective for reducing daily stress?',
+                        'options' => ['Deep breathing exercises', 'Watching TV', 'Eating comfort food', 'Working longer hours'],
                         'correct_answer' => 0
                     ],
                     [
                         'id' => 2,
-                        'text' => 'Which breathing technique is most effective for immediate stress relief?',
-                        'options' => ['Rapid breathing', 'Deep diaphragmatic breathing', 'Holding breath', 'Shallow breathing'],
+                        'text' => 'How many hours of sleep do most adults need per night?',
+                        'options' => ['5-6 hours', '7-9 hours', '10-12 hours', '4-5 hours'],
                         'correct_answer' => 1
                     ],
                     [
                         'id' => 3,
-                        'text' => 'How many hours of sleep do most adults need for optimal mental health?',
-                        'options' => ['4-5 hours', '6-7 hours', '7-9 hours', '10+ hours'],
-                        'correct_answer' => 2
+                        'text' => 'What is a healthy way to cope with anxiety?',
+                        'options' => ['Avoiding all stressful situations', 'Mindfulness meditation', 'Isolating yourself', 'Ignoring the feelings'],
+                        'correct_answer' => 1
                     ],
                     [
                         'id' => 4,
-                        'text' => 'What is a key benefit of practicing gratitude regularly?',
-                        'options' => ['Increased stress', 'Improved mood and outlook', 'Better physical strength', 'Enhanced memory only'],
-                        'correct_answer' => 1
+                        'text' => 'Which activity can improve mental clarity?',
+                        'options' => ['Regular exercise', 'Excessive caffeine', 'Skipping meals', 'Staying indoors'],
+                        'correct_answer' => 0
                     ],
                     [
                         'id' => 5,
-                        'text' => 'Which activity is proven to reduce anxiety and depression?',
-                        'options' => ['Watching TV', 'Regular physical exercise', 'Eating more sugar', 'Avoiding social contact'],
+                        'text' => 'What is the benefit of keeping a gratitude journal?',
+                        'options' => ['Improves memory', 'Enhances positive thinking', 'Increases appetite', 'Reduces sleep'],
                         'correct_answer' => 1
                     ]
                 ]),
-                'points_per_question' => 12,
+                'points_per_question' => 10,
                 'is_active' => true,
                 'available_from' => Carbon::now(),
                 'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'en',
+                'icon_path' => 'brain'
             ],
             [
-                'title' => 'Physical Fitness Essentials',
-                'description' => 'Learn about exercise principles, fitness components, and healthy movement patterns.',
+                'title' => 'Fitness Fundamentals',
+                'description' => 'Test your understanding of exercise principles and physical fitness for a healthier lifestyle.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
@@ -115,149 +117,68 @@ class QuizSeeder extends Seeder
                     ],
                     [
                         'id' => 2,
-                        'text' => 'What are the main components of physical fitness?',
-                        'options' => ['Only strength', 'Cardio, strength, flexibility, balance', 'Just running', 'Only flexibility'],
+                        'text' => 'Which type of exercise is best for cardiovascular health?',
+                        'options' => ['Weight lifting only', 'Aerobic exercise', 'Stretching only', 'Yoga only'],
                         'correct_answer' => 1
                     ],
                     [
                         'id' => 3,
-                        'text' => 'When is the best time to stretch for injury prevention?',
-                        'options' => ['Only before exercise', 'Only after exercise', 'Both before and after exercise', 'Never stretch'],
+                        'text' => 'When is the best time to stretch?',
+                        'options' => ['Only before exercise', 'After warming up', 'Never', 'Only when injured'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 4,
+                        'text' => 'What is the recommended rest time between strength training sessions?',
+                        'options' => ['No rest needed', '24-48 hours', '1 week', '10 minutes'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 5,
+                        'text' => 'Which is a sign of overtraining?',
+                        'options' => ['Increased energy', 'Better sleep', 'Persistent fatigue', 'Improved mood'],
+                        'correct_answer' => 2
+                    ]
+                ]),
+                'points_per_question' => 10,
+                'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
+                'locale' => 'en',
+                'icon_path' => 'muscle'
+            ],
+            [
+                'title' => 'Sleep Optimization',
+                'description' => 'Learn about healthy sleep habits and their impact on overall wellness and daily performance.',
+                'questions' => json_encode([
+                    [
+                        'id' => 1,
+                        'text' => 'What is the ideal bedroom temperature for sleep?',
+                        'options' => ['75-80°F', '60-67°F', '50-55°F', '80-85°F'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 2,
+                        'text' => 'How long before bedtime should you avoid screens?',
+                        'options' => ['30 minutes', '1 hour', '3 hours', '5 minutes'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 3,
+                        'text' => 'Which beverage should be avoided before bedtime?',
+                        'options' => ['Herbal tea', 'Water', 'Coffee', 'Warm milk'],
                         'correct_answer' => 2
                     ],
                     [
                         'id' => 4,
-                        'text' => 'What is the target heart rate zone for moderate exercise?',
-                        'options' => ['50-70% of max heart rate', '85-95% of max heart rate', '30-40% of max heart rate', '100% of max heart rate'],
-                        'correct_answer' => 0
-                    ],
-                    [
-                        'id' => 5,
-                        'text' => 'How often should strength training be performed?',
-                        'options' => ['Daily', '2-3 times per week', 'Once per month', 'Only when feeling strong'],
-                        'correct_answer' => 1
-                    ]
-                ]),
-                'points_per_question' => 12,
-                'is_active' => true,
-                'available_from' => Carbon::now(),
-                'available_until' => Carbon::now()->addMonths(12),
-                'locale' => 'en',
-            ],
-            [
-                'title' => 'Environmental Wellness',
-                'description' => 'Understand how environmental factors impact health and learn sustainable living practices.',
-                'questions' => json_encode([
-                    [
-                        'id' => 1,
-                        'text' => 'What is the most effective way to reduce your carbon footprint?',
-                        'options' => ['Use more plastic', 'Reduce, reuse, recycle', 'Drive more often', 'Use more electricity'],
-                        'correct_answer' => 1
-                    ],
-                    [
-                        'id' => 2,
-                        'text' => 'How does spending time in nature benefit mental health?',
-                        'options' => ['It doesn\'t help', 'Reduces stress and improves mood', 'Only helps physical health', 'Makes you more anxious'],
-                        'correct_answer' => 1
-                    ],
-                    [
-                        'id' => 3,
-                        'text' => 'What is a simple way to improve indoor air quality?',
-                        'options' => ['Keep windows closed always', 'Add houseplants', 'Use more chemicals', 'Increase humidity to 90%'],
-                        'correct_answer' => 1
-                    ],
-                    [
-                        'id' => 4,
-                        'text' => 'Which transportation method is most environmentally friendly?',
-                        'options' => ['Large SUV', 'Walking or cycling', 'Private jet', 'Motorcycle'],
+                        'text' => 'What is sleep hygiene?',
+                        'options' => ['Showering before bed', 'Practices that promote good sleep', 'Cleaning your bedroom', 'Washing bedsheets'],
                         'correct_answer' => 1
                     ],
                     [
                         'id' => 5,
-                        'text' => 'What percentage of waste can typically be recycled or composted?',
-                        'options' => ['10-20%', '70-80%', '5%', '100%'],
-                        'correct_answer' => 1
-                    ]
-                ]),
-                'points_per_question' => 15,
-                'is_active' => true,
-                'available_from' => Carbon::now(),
-                'available_until' => Carbon::now()->addMonths(12),
-                'locale' => 'en',
-            ],
-            [
-                'title' => 'Social Wellness & Relationships',
-                'description' => 'Explore the importance of social connections and healthy relationship building.',
-                'questions' => json_encode([
-                    [
-                        'id' => 1,
-                        'text' => 'What is the most important skill for building strong relationships?',
-                        'options' => ['Talking more', 'Active listening', 'Being right always', 'Avoiding conflict'],
-                        'correct_answer' => 1
-                    ],
-                    [
-                        'id' => 2,
-                        'text' => 'How do strong social connections impact health?',
-                        'options' => ['No impact', 'Improve immune system and longevity', 'Only affect mood', 'Make you weaker'],
-                        'correct_answer' => 1
-                    ],
-                    [
-                        'id' => 3,
-                        'text' => 'What is emotional intelligence?',
-                        'options' => ['Being very smart', 'Understanding and managing emotions', 'Having no emotions', 'Only helping others'],
-                        'correct_answer' => 1
-                    ],
-                    [
-                        'id' => 4,
-                        'text' => 'How can volunteering benefit your wellness?',
-                        'options' => ['It\'s just work', 'Increases purpose and social connection', 'Wastes time', 'Only helps others'],
-                        'correct_answer' => 1
-                    ],
-                    [
-                        'id' => 5,
-                        'text' => 'What is a healthy way to handle conflict in relationships?',
-                        'options' => ['Avoid it completely', 'Communicate openly and respectfully', 'Always win arguments', 'Get angry quickly'],
-                        'correct_answer' => 1
-                    ]
-                ]),
-                'points_per_question' => 12,
-                'is_active' => true,
-                'available_from' => Carbon::now(),
-                'available_until' => Carbon::now()->addMonths(12),
-                'locale' => 'en',
-            ],
-            [
-                'title' => 'Sleep & Recovery Science',
-                'description' => 'Learn about sleep cycles, recovery processes, and optimizing rest for better health.',
-                'questions' => json_encode([
-                    [
-                        'id' => 1,
-                        'text' => 'What happens during REM sleep?',
-                        'options' => ['Nothing important', 'Memory consolidation and dreaming', 'Only physical rest', 'Digestion only'],
-                        'correct_answer' => 1
-                    ],
-                    [
-                        'id' => 2,
-                        'text' => 'What is the ideal bedroom temperature for sleep?',
-                        'options' => ['80-85°F', '60-67°F', '70-75°F', '50-55°F'],
-                        'correct_answer' => 1
-                    ],
-                    [
-                        'id' => 3,
-                        'text' => 'How long before bedtime should you avoid screens?',
-                        'options' => ['No need to avoid', '1-2 hours', '10 minutes', '4-5 hours'],
-                        'correct_answer' => 1
-                    ],
-                    [
-                        'id' => 4,
-                        'text' => 'What hormone regulates sleep-wake cycles?',
-                        'options' => ['Insulin', 'Melatonin', 'Adrenaline', 'Cortisol'],
-                        'correct_answer' => 1
-                    ],
-                    [
-                        'id' => 5,
-                        'text' => 'Which activity promotes better sleep quality?',
-                        'options' => ['Late-night exercise', 'Regular sleep schedule', 'Caffeine before bed', 'Large meals before sleep'],
+                        'text' => 'Which activity can improve sleep quality?',
+                        'options' => ['Late-night exercise', 'Regular sleep schedule', 'Large meals before bed', 'Bright lights'],
                         'correct_answer' => 1
                     ]
                 ]),
@@ -266,89 +187,260 @@ class QuizSeeder extends Seeder
                 'available_from' => Carbon::now(),
                 'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'en',
+                'icon_path' => 'star'
             ],
             [
-                'title' => 'Stress Management Mastery',
-                'description' => 'Master techniques for managing stress and building resilience in daily life.',
+                'title' => 'Stress Management',
+                'description' => 'Discover effective strategies for managing stress and maintaining emotional balance in daily life.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
-                        'text' => 'What is the first step in effective stress management?',
-                        'options' => ['Ignore the stress', 'Identify stress triggers', 'Work harder', 'Avoid all challenges'],
-                        'correct_answer' => 1
+                        'text' => 'Which is a physical symptom of chronic stress?',
+                        'options' => ['Improved digestion', 'Better sleep', 'Muscle tension', 'Increased energy'],
+                        'correct_answer' => 2
                     ],
                     [
                         'id' => 2,
-                        'text' => 'Which technique helps activate the body\'s relaxation response?',
-                        'options' => ['Rapid thinking', 'Progressive muscle relaxation', 'Multitasking', 'Skipping meals'],
-                        'correct_answer' => 1
+                        'text' => 'What is the 4-7-8 breathing technique?',
+                        'options' => ['Inhale 4, hold 7, exhale 8', 'Exercise for 4-7-8 minutes', 'Eat 4-7-8 times daily', 'Sleep 4-7-8 hours'],
+                        'correct_answer' => 0
                     ],
                     [
                         'id' => 3,
-                        'text' => 'How does chronic stress affect the immune system?',
-                        'options' => ['Strengthens it', 'Weakens it', 'No effect', 'Only affects mood'],
-                        'correct_answer' => 1
+                        'text' => 'Which activity is NOT recommended for stress relief?',
+                        'options' => ['Meditation', 'Exercise', 'Excessive alcohol consumption', 'Deep breathing'],
+                        'correct_answer' => 2
                     ],
                     [
                         'id' => 4,
-                        'text' => 'What is a healthy coping mechanism for stress?',
-                        'options' => ['Substance abuse', 'Regular exercise and meditation', 'Social isolation', 'Overeating'],
+                        'text' => 'What is progressive muscle relaxation?',
+                        'options' => ['Running progressively faster', 'Tensing and relaxing muscle groups', 'Lifting heavier weights', 'Stretching for hours'],
                         'correct_answer' => 1
                     ],
                     [
                         'id' => 5,
-                        'text' => 'Which mindset helps build resilience?',
-                        'options' => ['Fixed mindset', 'Growth mindset', 'Negative thinking', 'Perfectionism'],
+                        'text' => 'How can time management help reduce stress?',
+                        'options' => ['By working longer hours', 'By prioritizing tasks', 'By avoiding all responsibilities', 'By multitasking constantly'],
                         'correct_answer' => 1
                     ]
                 ]),
-                'points_per_question' => 15,
+                'points_per_question' => 10,
                 'is_active' => true,
                 'available_from' => Carbon::now(),
                 'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'en',
+                'icon_path' => 'shield'
             ],
             [
-                'title' => 'Holistic Wellness Integration',
-                'description' => 'Advanced quiz covering the integration of all wellness dimensions for optimal health.',
+                'title' => 'Hydration and Health',
+                'description' => 'Understand the importance of proper hydration and its effects on body functions and wellness.',
                 'questions' => json_encode([
                     [
                         'id' => 1,
-                        'text' => 'What does holistic wellness mean?',
-                        'options' => ['Only physical health', 'Balance of mind, body, and spirit', 'Just mental health', 'Only nutrition'],
+                        'text' => 'What percentage of the human body is water?',
+                        'options' => ['45%', '60%', '75%', '90%'],
                         'correct_answer' => 1
                     ],
                     [
                         'id' => 2,
-                        'text' => 'How are the different dimensions of wellness connected?',
-                        'options' => ['They\'re completely separate', 'They influence each other', 'Only some are connected', 'Connection doesn\'t matter'],
-                        'correct_answer' => 1
+                        'text' => 'Which is a sign of dehydration?',
+                        'options' => ['Clear urine', 'Increased energy', 'Dark yellow urine', 'Better concentration'],
+                        'correct_answer' => 2
                     ],
                     [
                         'id' => 3,
-                        'text' => 'What is the key to sustainable wellness habits?',
-                        'options' => ['Extreme changes', 'Gradual, consistent improvements', 'Perfect execution', 'Following trends'],
+                        'text' => 'When should you drink more water?',
+                        'options' => ['Only when thirsty', 'During exercise', 'Never', 'Only with meals'],
                         'correct_answer' => 1
                     ],
                     [
                         'id' => 4,
-                        'text' => 'How should you approach setbacks in your wellness journey?',
-                        'options' => ['Give up completely', 'Learn and adjust your approach', 'Blame external factors', 'Start over from scratch'],
-                        'correct_answer' => 1
+                        'text' => 'Which beverage contributes most to hydration?',
+                        'options' => ['Coffee', 'Soda', 'Water', 'Energy drinks'],
+                        'correct_answer' => 2
                     ],
                     [
                         'id' => 5,
-                        'text' => 'What role does community play in wellness?',
-                        'options' => ['No role', 'Provides support and accountability', 'Only creates pressure', 'Slows progress'],
+                        'text' => 'How does proper hydration affect skin health?',
+                        'options' => ['Makes it oily', 'Improves elasticity', 'Causes breakouts', 'Has no effect'],
                         'correct_answer' => 1
                     ]
                 ]),
-                'points_per_question' => 20,
+                'points_per_question' => 10,
                 'is_active' => true,
                 'available_from' => Carbon::now(),
                 'available_until' => Carbon::now()->addMonths(12),
                 'locale' => 'en',
+                'icon_path' => 'heart'
             ],
+            [
+                'title' => 'Environmental Wellness',
+                'description' => 'Explore how your environment affects your health and learn sustainable living practices.',
+                'questions' => json_encode([
+                    [
+                        'id' => 1,
+                        'text' => 'Which practice reduces environmental impact and improves health?',
+                        'options' => ['Driving everywhere', 'Walking or biking', 'Using disposable items', 'Eating processed foods'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 2,
+                        'text' => 'What is the benefit of indoor plants?',
+                        'options' => ['They increase humidity', 'They improve air quality', 'They reduce noise', 'All of the above'],
+                        'correct_answer' => 3
+                    ],
+                    [
+                        'id' => 3,
+                        'text' => 'Which is a sustainable food choice?',
+                        'options' => ['Highly processed foods', 'Local, seasonal produce', 'Imported exotic fruits', 'Fast food'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 4,
+                        'text' => 'How does spending time in nature benefit health?',
+                        'options' => ['Reduces stress', 'Improves mood', 'Boosts immune system', 'All of the above'],
+                        'correct_answer' => 3
+                    ],
+                    [
+                        'id' => 5,
+                        'text' => 'What is the best way to reduce plastic waste?',
+                        'options' => ['Use more disposable items', 'Choose reusable alternatives', 'Ignore the problem', 'Buy more plastic products'],
+                        'correct_answer' => 1
+                    ]
+                ]),
+                'points_per_question' => 10,
+                'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
+                'locale' => 'en',
+                'icon_path' => 'crown'
+            ],
+            [
+                'title' => 'Mindfulness and Meditation',
+                'description' => 'Learn about mindfulness practices and meditation techniques for mental clarity and peace.',
+                'questions' => json_encode([
+                    [
+                        'id' => 1,
+                        'text' => 'What is mindfulness?',
+                        'options' => ['Thinking about the future', 'Being present in the moment', 'Multitasking', 'Avoiding thoughts'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 2,
+                        'text' => 'How long should beginners meditate?',
+                        'options' => ['2 hours', '5-10 minutes', '30 seconds', '1 hour'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 3,
+                        'text' => 'Which is a benefit of regular meditation?',
+                        'options' => ['Increased anxiety', 'Better focus', 'More stress', 'Less sleep'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 4,
+                        'text' => 'What should you do when your mind wanders during meditation?',
+                        'options' => ['Get frustrated', 'Stop meditating', 'Gently return focus to breath', 'Think harder'],
+                        'correct_answer' => 2
+                    ],
+                    [
+                        'id' => 5,
+                        'text' => 'Which environment is best for meditation?',
+                        'options' => ['Noisy and bright', 'Quiet and comfortable', 'While driving', 'During meetings'],
+                        'correct_answer' => 1
+                    ]
+                ]),
+                'points_per_question' => 10,
+                'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
+                'locale' => 'en',
+                'icon_path' => 'lightning'
+            ],
+            [
+                'title' => 'Work-Life Balance',
+                'description' => 'Discover strategies for maintaining healthy boundaries between work and personal life.',
+                'questions' => json_encode([
+                    [
+                        'id' => 1,
+                        'text' => 'What is a sign of poor work-life balance?',
+                        'options' => ['Regular exercise', 'Chronic exhaustion', 'Good relationships', 'Adequate sleep'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 2,
+                        'text' => 'Which practice helps maintain work-life balance?',
+                        'options' => ['Working weekends', 'Setting boundaries', 'Skipping breaks', 'Checking emails constantly'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 3,
+                        'text' => 'How can you disconnect from work at home?',
+                        'options' => ['Keep work emails open', 'Create a dedicated workspace', 'Work in bed', 'Never take breaks'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 4,
+                        'text' => 'What is the benefit of taking regular breaks?',
+                        'options' => ['Decreased productivity', 'Improved focus', 'More stress', 'Less creativity'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 5,
+                        'text' => 'Which activity supports work-life balance?',
+                        'options' => ['Working through lunch', 'Pursuing hobbies', 'Staying late every day', 'Skipping vacations'],
+                        'correct_answer' => 1
+                    ]
+                ]),
+                'points_per_question' => 10,
+                'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
+                'locale' => 'en',
+                'icon_path' => 'target'
+            ],
+            [
+                'title' => 'Healthy Habits Formation',
+                'description' => 'Learn the science behind habit formation and strategies for building lasting healthy behaviors.',
+                'questions' => json_encode([
+                    [
+                        'id' => 1,
+                        'text' => 'How long does it typically take to form a new habit?',
+                        'options' => ['7 days', '21-66 days', '1 year', '3 days'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 2,
+                        'text' => 'What is the most effective way to build a new habit?',
+                        'options' => ['Start with big changes', 'Begin with small, consistent actions', 'Do it perfectly every time', 'Wait for motivation'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 3,
+                        'text' => 'Which strategy helps maintain new habits?',
+                        'options' => ['Habit stacking', 'Doing it randomly', 'Avoiding reminders', 'Making it complicated'],
+                        'correct_answer' => 0
+                    ],
+                    [
+                        'id' => 4,
+                        'text' => 'What should you do when you miss a day of your new habit?',
+                        'options' => ['Give up completely', 'Get back on track the next day', 'Wait until next month', 'Feel guilty for weeks'],
+                        'correct_answer' => 1
+                    ],
+                    [
+                        'id' => 5,
+                        'text' => 'Which factor is most important for habit success?',
+                        'options' => ['Perfection', 'Consistency', 'Speed', 'Complexity'],
+                        'correct_answer' => 1
+                    ]
+                ]),
+                'points_per_question' => 10,
+                'is_active' => true,
+                'available_from' => Carbon::now(),
+                'available_until' => Carbon::now()->addMonths(12),
+                'locale' => 'en',
+                'icon_path' => 'rocket'
+            ]
         ];
 
         foreach ($quizzes as $quiz) {

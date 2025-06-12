@@ -18,7 +18,8 @@ class Quiz extends Model
         'is_active',
         'available_from',
         'available_until',
-        'locale'
+        'locale',
+        'icon_path'
     ];
 
     protected $casts = [
