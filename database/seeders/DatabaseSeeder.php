@@ -14,25 +14,20 @@ class DatabaseSeeder extends Seeder
     {
         // Call seeders in the correct order to handle dependencies
         $this->call([
-            // First seed users
             UserSeeder::class,
-
-            // Then seed badges, challenges, and quizzes in both languages
             BadgeSeeder::class,
             BadgeSeederEs::class,
             ChallengeSeeder::class,
             ChallengeSeederEs::class,
             QuizSeeder::class,
             QuizSeederEs::class,
-
-            // Seed tips in both languages
+            QuizSeederEsAdditional::class,
+            QuizSeederEnAdditional::class,
             TipSeeder::class,
             TipSeederEs::class,
-
-            // Finally seed the relationship tables
-            UserBadgeSeeder::class,
             UserChallengeSeeder::class,
             QuizAttemptSeeder::class,
+            UserBadgeSeeder::class,
         ]);
     }
 }
