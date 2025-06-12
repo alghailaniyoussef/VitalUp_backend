@@ -115,7 +115,7 @@ APP_NAME=VitalUp
 APP_ENV=production
 APP_KEY=base64:your_generated_key
 APP_DEBUG=false
-APP_URL=https://your-railway-domain.railway.app
+APP_URL=https://vitalupbackend-production.up.railway.app
 
 DB_CONNECTION=mysql
 DB_HOST=your_railway_db_host
