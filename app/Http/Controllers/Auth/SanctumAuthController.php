@@ -139,8 +139,51 @@ class SanctumAuthController extends Controller
                 \Log::info('👤 User authenticated', [
                     'user_id' => $user->id,
                     'user_email' => $user->email,
-                    'user_name' => $user->name
+                    'user_name' => $user->name,
+                    'email_verified' => $user->hasVerifiedEmail()
                 ]);
+
+                // Check if email is verified
+                if (!$user->hasVerifiedEmail()) {
+                    \Log::warning('❌ Login blocked - email not verified', [
+                        'user_id' => $user->id,
+                        'email' => $user->email
+                    ]);
+                    
+                    return response()->json([
+                        'message' => 'Tu email no ha sido verificado. Por favor verifica tu email antes de iniciar sesión.',
+                        'error' => 'email_not_verified',
+                        'email_verification_required' => true
+                    ], 403);
+                }
+
+                // Check if user should receive welcome back email
+                $lastLogin = $user->last_login_at;
+                $daysSinceLastLogin = 0;
+                
+                if ($lastLogin) {
+                    $daysSinceLastLogin = now()->diffInDays($lastLogin);
+                    
+                    // Send welcome back email if user hasn't logged in for 7+ days
+                    if ($daysSinceLastLogin >= 7) {
+                        try {
+                            $emailService = app(\App\Services\EmailNotificationService::class);
+                            $emailService->sendWelcomeBackEmail($user, $daysSinceLastLogin);
+                            \Log::info('Welcome back email sent', [
+                                'user_id' => $user->id,
+                                'days_since_last_login' => $daysSinceLastLogin
+                            ]);
+                        } catch (\Exception $e) {
+                            \Log::error('Failed to send welcome back email', [
+                                'user_id' => $user->id,
+                                'error' => $e->getMessage()
+                            ]);
+                        }
+                    }
+                }
+                
+                // Update last login timestamp
+                $user->update(['last_login_at' => now()]);
 
                 // Create Sanctum token
                 $token = $user->createToken('auth-token')->plainTextToken;
@@ -152,6 +195,9 @@ class SanctumAuthController extends Controller
                         'id' => $user->id,
                         'name' => $user->name,
                         'email' => $user->email,
+                        'email_verified_at' => $user->email_verified_at,
+                        'last_login_at' => $user->last_login_at,
+                        'days_since_last_login' => $daysSinceLastLogin,
                     ],
                     'token' => $token,
                     'token_type' => 'Bearer'

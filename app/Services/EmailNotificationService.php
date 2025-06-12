@@ -81,13 +81,52 @@ class EmailNotificationService
      */
     public function sendWelcomeEmail(User $user): bool
     {
+        $locale = $user->locale ?? 'es'; // Default to Spanish
+        $subject = $locale === 'en' ? 'Welcome to VitalUp!' : '¡Bienvenido a VitalUp!';
+        
         return $this->sendEmail($user, [
-            'subject' => '¡Bienvenido a VitalUp!',
-            'template' => 'emails.welcome',
+            'subject' => $subject,
+            'template' => "emails.{$locale}.welcome",
             'data' => [
                 'user' => $user
             ],
             'type' => 'welcome'
+        ]);
+    }
+
+    /**
+     * Enviar email de bienvenida de vuelta
+     */
+    public function sendWelcomeBackEmail(User $user, int $daysSinceLastLogin): bool
+    {
+        $locale = $user->locale ?? 'es'; // Default to Spanish
+        $subject = $locale === 'en' 
+            ? 'Welcome Back to VitalUp!' 
+            : '¡Bienvenido de Vuelta a VitalUp!';
+        
+        // Get additional stats for the email
+        $completedChallenges = is_array($user->completed_challenges) 
+            ? count($user->completed_challenges) 
+            : 0;
+        
+        $badgesEarned = $user->badges()->count();
+        
+        // Get new content since last login (simplified for now)
+        $newChallenges = 0; // Could be calculated based on created_at dates
+        $newTips = 0; // Could be calculated based on created_at dates
+        
+        return $this->sendEmail($user, [
+            'subject' => $subject,
+            'template' => "emails.{$locale}.welcome-back",
+            'data' => [
+                'user' => $user,
+                'days_since_last_login' => $daysSinceLastLogin,
+                'completed_challenges' => $completedChallenges,
+                'badges_earned' => $badgesEarned,
+                'new_challenges' => $newChallenges,
+                'new_tips' => $newTips
+            ],
+            'type' => 'welcome_back'
         ]);
     }
 
@@ -361,18 +400,19 @@ class EmailNotificationService
         }
 
         try {
-            // Enviar el email
+            // Send the email immediately
             Mail::send($params['template'], $params['data'], function ($message) use ($user, $params) {
                 $message->to($user->email, $user->name)
-                    ->subject($params['subject']);
+                        ->subject($params['subject']);
             });
 
-            // Registrar el envío en la base de datos
+            // Log successful email sending
             $emailLogData = [
                 'user_id' => $user->id,
                 'email_type' => $params['type'],
                 'status' => 'sent',
-                'recipient' => $user->email
+                'recipient' => $user->email,
+                'sent_at' => now()
             ];
 
             // Add related_id if provided
@@ -382,21 +422,22 @@ class EmailNotificationService
 
             EmailLog::create($emailLogData);
 
-            // Registrar el envío exitoso en el log
-            Log::info($params['type'] . ' email sent successfully to user: ' . $user->email);
+            Log::info('Email sent successfully', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'type' => $params['type']
+            ]);
 
             return true;
         } catch (\Exception $e) {
-            // Registrar el error
-            Log::error('Error al enviar email: ' . $e->getMessage());
-
-            // Registrar el fallo en la base de datos
+            // Log failed email sending
             $errorLogData = [
                 'user_id' => $user->id,
                 'email_type' => $params['type'],
                 'status' => 'failed',
+                'error_message' => $e->getMessage(),
                 'recipient' => $user->email,
-                'error_message' => $e->getMessage()
+                'sent_at' => now()
             ];
 
             // Add related_id if provided
@@ -405,6 +446,13 @@ class EmailNotificationService
             }
 
             EmailLog::create($errorLogData);
+
+            Log::error('Failed to send email', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'type' => $params['type'],
+                'error' => $e->getMessage()
+            ]);
 
             return false;
         }

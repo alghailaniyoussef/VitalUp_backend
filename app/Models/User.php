@@ -29,6 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'points',
         'level',
         'last_email_sent_at',
+        'last_login_at',
         'is_admin'
     ];
 
@@ -48,6 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'points' => 'integer',
         'level' => 'integer',
         'last_email_sent_at' => 'datetime',
+        'last_login_at' => 'datetime',
         'is_admin' => 'boolean'
     ];
 
