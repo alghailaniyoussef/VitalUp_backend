@@ -325,4 +325,41 @@ class SanctumAuthController extends Controller
             ], 500);
         }
     }
+
+    public function sendWelcomeEmail(Request $request)
+    {
+        try {
+            $user = $request->user();
+            
+            if (!$user) {
+                return response()->json([
+                    'message' => 'User not authenticated'
+                ], 401);
+            }
+
+            $emailService = app(\App\Services\EmailNotificationService::class);
+            $emailService->sendWelcomeEmail($user);
+            
+            \Log::info('Welcome email sent successfully', [
+                'user_id' => $user->id,
+                'email' => $user->email
+            ]);
+            
+            return response()->json([
+                'message' => 'Welcome email sent successfully'
+            ], 200);
+            
+        } catch (\Exception $e) {
+            \Log::error('Failed to send welcome email', [
+                'user_id' => $request->user()?->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'message' => 'Failed to send welcome email',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

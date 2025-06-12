@@ -95,6 +95,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/points/history', [\App\Http\Controllers\UserPointsHistoryController::class, 'index']);
     Route::get('/points/summary', [\App\Http\Controllers\UserPointsHistoryController::class, 'summary']);
 
+    // Welcome email route
+    Route::post('/send-welcome-email', [SanctumAuthController::class, 'sendWelcomeEmail']);
+
     // Admin routes
 Route::prefix('admin')->middleware('is_admin_user')->group(function () {
     // Dashboard analytics
